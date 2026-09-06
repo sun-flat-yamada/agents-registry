@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "agent-registry-bundle",
+  "version": "1.1.0",
+  "description": "Unified Agent & Skills Registry supporting Claude Plugin and APM standards. Features Harness Engineering (retrospective-harness & update-harness), Code Reviewers, and Workspace/Wiki/Collection primitives.",
+  "author": {
+    "name": "sun_flat"
+  },
+  "keywords": [
+    "claude-plugin",
+    "apm",
+    "agent-skills",
+    "harness-engineering",
+    "retrospective-harness",
+    "self-improvement",
+    "code-review",
+    "wiki",
+    "collection",
+    "workspace"
+  ],
+  "skills": [
+    "./skills/code-review",
+    "./skills/string-helpers",
+    "./skills/wiki-ingest",
+    "./skills/wiki-promote",
+    "./skills/wiki-lint",
+    "./skills/collection-builder",
+    "./skills/meta-skill-manager",
+    "./skills/automation-scheduler",
+    "./skills/retrospective-harness",
+    "./skills/update-harness"
+  ],
+  "agents": [
+    "./agents/code-reviewer.md",
+    "./agents/code-review-orchestrator.md",
+    "./agents/reviewer-effective.md",
+    "./agents/reviewer-memory-safety.md",
+    "./agents/reviewer-security.md",
+    "./agents/reviewer-style-quality.md",
+    "./agents/workspace-agent.md",
+    "./agents/collection-architect.md",
+    "./agents/wiki-curator.md",
+    "./agents/retrospective-harness-agent.md",
+    "./agents/update-harness-agent.md"
+  ],
+  "hooks": "./hooks/hooks.json",
+  "commands": [
+    "./commands/explain.md",
+    "./commands/code-review-subagent.md",
+    "./commands/retrospective-harness.md",
+    "./commands/update-harness.md"
+  ]
+}

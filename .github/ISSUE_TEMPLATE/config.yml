@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: GitHub Discussions / Questions
+    url: https://github.com
+    about: Please ask questions and discuss ideas in Discussions.

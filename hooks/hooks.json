@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-hooks.json",
+  "PreToolUse": [
+    {
+      "matcher": "Bash",
+      "command": "node -e \"const { execSync } = require('child_process'); if (process.platform === 'win32') { execSync('powershell.exe -ExecutionPolicy Bypass -File ./hooks/pre-commit.ps1', { stdio: 'inherit' }); } else { execSync('bash ./hooks/pre-commit.sh', { stdio: 'inherit' }); }\""
+    }
+  ]
+}

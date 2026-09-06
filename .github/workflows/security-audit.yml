@@ -1,0 +1,113 @@
+name: Security Audit (Cisco & NVIDIA)
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'skills/**'
+      - 'agents/**'
+      - 'commands/**'
+      - 'instructions/**'
+      - 'contexts/**'
+      - 'chatmodes/**'
+      - 'scripts/**'
+      - '.github/workflows/**'
+      - 'apm.yml'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'skills/**'
+      - 'agents/**'
+      - 'commands/**'
+      - 'instructions/**'
+      - 'contexts/**'
+      - 'chatmodes/**'
+      - 'scripts/**'
+      - '.github/workflows/**'
+      - 'apm.yml'
+  schedule:
+    # Run weekly scan (every Monday at 02:00 UTC) to catch newly published CVEs
+    - cron: '0 2 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  audit-skills-and-agents:
+    name: Audit Skills & Agents Security
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install Security Scanners (Cisco & NVIDIA)
+        run: |
+          echo "Installing Cisco AI Skill Scanner and NVIDIA SkillSpector via uv..."
+          uv pip install --system -r scripts/requirements-security.txt
+
+      - name: Verify Scanner Availability
+        run: |
+          echo "Verifying scanner binaries..."
+          skill-scanner --help > /dev/null && echo "✓ Cisco Skill Scanner (skill-scanner) ready"
+          skillspector --help > /dev/null && echo "✓ NVIDIA SkillSpector (skillspector) ready"
+
+      - name: Run Security Audit Suite
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "Running incremental security audit for PR changes..."
+            python3 scripts/security-audit.py \
+              --changed-only \
+              --base-ref "origin/${{ github.base_ref }}" \
+              --fail-on high \
+              --output-json security-audit-report.json \
+              --output-markdown security-audit-report.md \
+              --output-sarif security-audit-report.sarif \
+              --verbose
+          else
+            echo "Running full registry security audit..."
+            python3 scripts/security-audit.py \
+              --fail-on high \
+              --output-json security-audit-report.json \
+              --output-markdown security-audit-report.md \
+              --output-sarif security-audit-report.sarif \
+              --verbose
+          fi
+
+      - name: Publish Step Summary
+        if: always()
+        run: |
+          if [ -f security-audit-report.md ]; then
+            cat security-audit-report.md >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload SARIF to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        continue-on-error: true
+        with:
+          sarif_file: security-audit-report.sarif
+
+      - name: Upload Audit Reports Artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-audit-reports
+          path: |
+            security-audit-report.json
+            security-audit-report.md
+            security-audit-report.sarif
+          retention-days: 14

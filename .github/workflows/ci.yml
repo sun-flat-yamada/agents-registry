@@ -1,0 +1,44 @@
+name: CI Validation
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  validate-registry:
+    name: Validate Registry Integrity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Validate JSON Files
+        run: |
+          python3 -c "
+          import json, glob, sys
+          json_files = ['.claude-plugin/plugin.json', '.claude-plugin/marketplace.json', '.mcp.json', 'hooks/hooks.json']
+          for f in json_files:
+              try:
+                  with open(f, 'r', encoding='utf-8') as fp:
+                      json.load(fp)
+                  print(f'✓ Valid JSON: {f}')
+              except Exception as e:
+                  print(f'❌ Invalid JSON: {f} -> {e}')
+                  sys.exit(1)
+          "
+
+      - name: Run Bash Sync Verification
+        run: |
+          chmod +x ./scripts/sync-apm.sh
+          ./scripts/sync-apm.sh --verify
+
+      - name: Run PowerShell Sync Verification
+        shell: pwsh
+        run: |
+          ./scripts/sync-apm.ps1 -VerifyOnly
+
+      - name: Run Fast Built-in Security Audit
+        run: |
+          python3 ./scripts/security-audit.py --scanners builtin --fail-on high

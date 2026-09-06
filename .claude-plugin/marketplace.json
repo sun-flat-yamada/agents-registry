@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace-manifest.json",
+  "name": "agent-registry-marketplace",
+  "description": "Enterprise Agent & Skills Registry Marketplace. Distributes Harness Engineering tools (retrospective-harness, update-harness), specialized agent personas, and Agent Skills Standard modules.",
+  "owner": {
+    "name": "sun_flat"
+  },
+  "plugins": [
+    {
+      "name": "agent-registry-bundle",
+      "description": "Full bundle containing Harness Engineering (retrospective-harness & update-harness), code-reviewer agent suite, Agent Skills, and workspace/wiki/collection tools.",
+      "version": "1.1.0",
+      "source": {
+        "source": "local",
+        "path": "./"
+      }
+    }
+  ]
+}

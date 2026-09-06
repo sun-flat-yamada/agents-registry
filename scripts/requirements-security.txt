@@ -1,0 +1,5 @@
+# Security Audit Suite for Agent Skills & Personas
+# Includes Cisco AI Skill Scanner and NVIDIA SkillSpector
+cisco-ai-skill-scanner>=2.0.14
+skillspector @ git+https://github.com/NVIDIA/skillspector.git
+pyyaml>=6.0
