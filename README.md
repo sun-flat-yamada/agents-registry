@@ -1,5 +1,7 @@
 # Unified Agent & Skills Registry
 
+[English](README.md) | [日本語](README.ja.md)
+
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin%20Ready-blueviolet.svg)](https://docs.claude.com)
 [![Agent Package Manager](https://img.shields.io/badge/Microsoft%20APM-Multi--Harness-blue.svg)](https://github.com/microsoft/apm)
 [![Agent Skills Standard](https://img.shields.io/badge/Agent%20Skills-Standard%20Compliant-brightgreen.svg)](https://github.com)
@@ -7,13 +9,13 @@
 [![Harness Engineering](https://img.shields.io/badge/Harness%20Engineering-RHO%20Enabled-orange.svg)](docs/harness-engineering.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-本リポジトリは、AI エージェントおよびスキルのパッケージングにおけるデファクトスタンダード（**Claude Code Plugin 形式 & Agent Skills Standard**）を Master (Source of Truth) として採用し、**Microsoft APM (Agent Package Manager)** によるマルチハーネス配信（Claude Code, Cursor, Copilot, Gemini）を完全サポートするハイブリッド構成の Agent Registry / Template です。
+This repository is a hybrid Agent Registry / Template that adopts de facto standards (**Claude Code Plugin format & Agent Skills Standard**) as the Master (Source of Truth), while fully supporting multi-harness distribution (Claude Code, Cursor, Copilot, Gemini) via **Microsoft APM (Agent Package Manager)**.
 
-最先端の **Harness Engineering (RHO)** による自律的自己診断・更新サイクル、および **Cisco & NVIDIA ツールによる強固なセキュリティ監査 CI/CD** を標準装備しています。
+It comes equipped out-of-the-box with autonomous self-diagnosis and update cycles powered by cutting-edge **Harness Engineering (RHO)**, as well as a **robust security audit CI/CD pipeline leveraging Cisco & NVIDIA tools**.
 
 ---
 
-## 🏛️ アーキテクチャ構成
+## 🏛️ Architecture
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -43,17 +45,17 @@
 
 ---
 
-## ⚡ クイックスタート
+## ⚡ Quickstart
 
-### 1. Claude Code プラグインとして利用
+### 1. Use as a Claude Code Plugin
 ```bash
 /plugin install github:sun-flat-yamada/agents-registry
 ```
 
-### 2. セキュリティ監査の実行 (ローカル)
-新規スキルやエージェントの作成・修正時に脆弱性やプロンプトインジェクションを検査します：
+### 2. Run Security Audit (Locally)
+Inspect new or updated skills and agents for vulnerabilities and prompt injection:
 ```powershell
-# Windows (PowerShell) - 変更・追加されたスキルのみ高速スキャン
+# Windows (PowerShell) - Fast scan for changed/added skills only
 powershell -ExecutionPolicy Bypass -File ./scripts/audit-security.ps1 -ChangedOnly
 ```
 ```bash
@@ -61,138 +63,138 @@ powershell -ExecutionPolicy Bypass -File ./scripts/audit-security.ps1 -ChangedOn
 ./scripts/audit-security.sh --changed-only
 ```
 
-### 3. Master と .apm レイヤーの同期
+### 3. Synchronize Master and .apm Layers
 ```powershell
 powershell -ExecutionPolicy Bypass -File ./scripts/sync-apm.ps1
 ```
 
 ---
 
-## 📚 詳細ドキュメント (Docs)
+## 📚 Detailed Documentation (Docs)
 
-機能ごとの詳細な手順・設定・アーキテクチャは `docs/` ディレクトリ配下に分類されています：
+Detailed guides, configuration procedures, and architecture specs are organized under the `docs/` directory:
 
-| ドキュメント | 概要 |
+| Document | Overview |
 | :--- | :--- |
-| [🛡️ **セキュリティ監査ガイド**](docs/security-audit.md) | Cisco AI Skill Scanner、NVIDIA SkillSpector、Built-in Linter の統合仕様、CLI リファレンス、およびスキル新規追加時の CI/CD 自動稼働パイプライン |
-| [🧠 **Harness Engineering ガイド**](docs/harness-engineering.md) | Retrospective Harness Optimization (RHO) に基づくエージェント環境の自己診断・改善計画 (HIP) 策定・安全な自動更新サイクル |
-| [🚀 **インストールとマルチハーネス配信**](docs/usage-and-deployment.md) | Claude Code での利用方法、Microsoft APM (`apm.yml`) によるマルチプラットフォーム配信、および Master レイヤー自動同期手順 |
+| [🛡️ **Security Audit Guide**](docs/security-audit.md) | Integration specs for Cisco AI Skill Scanner, NVIDIA SkillSpector, and Built-in Linter, CLI reference, and CI/CD automated scan pipeline. |
+| [🧠 **Harness Engineering Guide**](docs/harness-engineering.md) | Autonomous environment self-diagnosis, Harness Improvement Plan (HIP) formulation, and safe automatic update cycles based on Retrospective Harness Optimization (RHO). |
+| [🚀 **Installation & Multi-Harness Deployment**](docs/usage-and-deployment.md) | Usage guide for Claude Code, multi-platform deployment via Microsoft APM (`apm.yml`), and Master layer auto-sync procedures. |
 
 ---
 
-## 🤖 登録エージェント一覧 (19 Agents)
+## 🤖 Registered Agents (19 Agents)
 
-本レジストリには、専門ドメインに特化した 19 のエージェント（`agents/*.md`）が収録されています：
+This registry includes 19 domain-specialized agents (`agents/*.md`):
 
-### 🧠 Harness Engineering (自己診断・改善)
-| エージェント | 説明 |
+### 🧠 Harness Engineering (Self-Diagnosis & Improvement)
+| Agent | Description |
 | :--- | :--- |
-| [`retrospective-harness-agent`](agents/retrospective-harness-agent.md) | 過去セッション履歴やエラーログからボトルネックを診断し、Harness Improvement Plan (HIP) を策定する診断エージェント |
-| [`update-harness-agent`](agents/update-harness-agent.md) | HIP 計画に基づき、Skills、Agents、Hooks、Rules をアトミックかつ安全に適用・更新する適用エージェント |
+| [`retrospective-harness-agent`](agents/retrospective-harness-agent.md) | Diagnostic agent that analyzes bottlenecks from past session history and error logs, formulating a Harness Improvement Plan (HIP). |
+| [`update-harness-agent`](agents/update-harness-agent.md) | Application agent that atomically and safely applies updates to Skills, Agents, Hooks, and Rules based on the HIP plan. |
 
-### 🛡️ Code Review Suite (コード品質・セキュリティ)
-| エージェント | 説明 |
+### 🛡️ Code Review Suite (Code Quality & Security)
+| Agent | Description |
 | :--- | :--- |
-| [`code-reviewer`](agents/code-reviewer.md) | コード品質、セキュリティ、パフォーマンス、保守性を多角的にレビューするメインエージェント |
-| [`code-review-orchestrator`](agents/code-review-orchestrator.md) | 4つの専門レビューエージェントを並列起動し、重複排除・重要度ソートされた統合レポートを生成 |
-| [`reviewer-security`](agents/reviewer-security.md) | OWASP Top 10、脆弱性、入力検証、暗号化に特化したセキュリティ専門エージェント |
-| [`reviewer-memory-safety`](agents/reviewer-memory-safety.md) | メモリ安全性、リソースリーク、並行性・スレッドセーフティに特化した専門エージェント |
-| [`reviewer-style-quality`](agents/reviewer-style-quality.md) | クリーンコード、命名規則、デザインパターン、可読性に特化した専門エージェント |
-| [`reviewer-effective`](agents/reviewer-effective.md) | Effective シリーズ（C++, C#, Java, Python 等）の言語別イディオム専門エージェント |
+| [`code-reviewer`](agents/code-reviewer.md) | Main agent that conducts multi-faceted code reviews covering quality, security, performance, and maintainability. |
+| [`code-review-orchestrator`](agents/code-review-orchestrator.md) | Orchestrates 4 specialized review agents in parallel to generate a deduplicated, priority-sorted integrated report. |
+| [`reviewer-security`](agents/reviewer-security.md) | Security specialist agent focusing on OWASP Top 10, vulnerabilities, input validation, and cryptography. |
+| [`reviewer-memory-safety`](agents/reviewer-memory-safety.md) | Specialist agent focusing on memory safety, resource leaks, concurrency, and thread safety. |
+| [`reviewer-style-quality`](agents/reviewer-style-quality.md) | Specialist agent focusing on clean code, naming conventions, design patterns, and readability. |
+| [`reviewer-effective`](agents/reviewer-effective.md) | Specialist agent focusing on language-specific idioms (Effective C++, C#, Java, Python, etc.). |
 
-### 🏛️ Workspace & Knowledge Core (自己改善ワークスペース)
-| エージェント | 説明 |
+### 🏛️ Workspace & Knowledge Core (Self-Improving Workspace)
+| Agent | Description |
 | :--- | :--- |
-| [`workspace-agent`](agents/workspace-agent.md) | 『The Workspace Is the Self-Improving Agent』思想に基づく Wiki/Collection/Automation の自律運用エージェント |
-| [`collection-architect`](agents/collection-architect.md) | コレクションスキーマ設計、データモデリング、整合性検証を担うアーキテクトエージェント |
-| [`wiki-curator`](agents/wiki-curator.md) | ナレッジベースの構造化、ノートの昇格 (Promote)、リント、定期保守を担うキュレーターエージェント |
+| [`workspace-agent`](agents/workspace-agent.md) | Autonomous operations agent for Wiki/Collection/Automation based on the "The Workspace Is the Self-Improving Agent" philosophy. |
+| [`collection-architect`](agents/collection-architect.md) | Architect agent responsible for collection schema design, data modeling, and integrity validation. |
+| [`wiki-curator`](agents/wiki-curator.md) | Curator agent responsible for knowledge base structuring, note promotion, linting, and periodic maintenance. |
 
-### 🎭 Specialized Roles & Personas (各種業務・専門ペルソナ)
-| エージェント | 説明 |
+### 🎭 Specialized Roles & Personas
+| Agent | Description |
 | :--- | :--- |
-| [`agent-personal`](agents/agent-personal.md) | 個人生産性向上、タスク整理、日々の意思決定を支援するパーソナルコンパニオン |
-| [`agent-office`](agents/agent-office.md) | ビジネス文書作成、議事録要約、オフィスワークフローを支援するオフィスアシスタント |
-| [`agent-guide`](agents/agent-guide.md) | システムやツールの使い方、オンボーディング、リファレンス案内を行うガイドエージェント |
-| [`agent-artist`](agents/agent-artist.md) | クリエイティブ構想、プロンプト設計、ビジュアルアイディア創出を支援するクリエイター |
-| [`agent-tutor`](agents/agent-tutor.md) | 段階的なカリキュラム設計、概念解説、理解度チェックを行う個別指導チューター |
-| [`agent-storyteller`](agents/agent-storyteller.md) | 世界観構築、キャラクター設定、ナラティブ執筆を行うストーリーテラー |
-| [`agent-accounting`](agents/agent-accounting.md) | 請求書・経費計算・帳簿データ整理を支援するアカウンティングエージェント |
-| [`agent-investor`](agents/agent-investor.md) | ポートフォリオ分析・市場データ・財務仮説検証を支援するインベスターエージェント |
+| [`agent-personal`](agents/agent-personal.md) | Personal companion assisting with personal productivity, task organization, and daily decision-making. |
+| [`agent-office`](agents/agent-office.md) | Office assistant supporting business document creation, meeting summary, and office workflows. |
+| [`agent-guide`](agents/agent-guide.md) | Guide agent providing system usage instructions, onboarding, and reference guides. |
+| [`agent-artist`](agents/agent-artist.md) | Creator supporting creative ideation, prompt design, and visual idea generation. |
+| [`agent-tutor`](agents/agent-tutor.md) | One-on-one tutor guiding structured curriculum design, concept explanations, and comprehension checks. |
+| [`agent-storyteller`](agents/agent-storyteller.md) | Storyteller managing world-building, character settings, and narrative writing. |
+| [`agent-accounting`](agents/agent-accounting.md) | Accounting agent assisting with invoicing, expense calculations, and bookkeeping data organization. |
+| [`agent-investor`](agents/agent-investor.md) | Investor agent assisting with portfolio analysis, market data, and financial hypothesis validation. |
 
 ---
 
-## 🛠️ 登録スキル一覧 (25 Skills)
+## 🛠️ Registered Skills (25 Skills)
 
-全スキルは **Agent Skills Standard (`skills/<slug>/SKILL.md`)** に完全準拠しています：
+All skills fully comply with the **Agent Skills Standard (`skills/<slug>/SKILL.md`)**:
 
 ### 🧠 Harness Engineering & Optimization (2)
-- [`retrospective-harness`](skills/retrospective-harness/SKILL.md): エージェント実行履歴の自己診断と Harness Improvement Plan (HIP) の自動策定
-- [`update-harness`](skills/update-harness/SKILL.md): 策定された HIP に基づく Skills / Agents / Hooks のアトミック更新と検証
+- [`retrospective-harness`](skills/retrospective-harness/SKILL.md): Self-diagnosis of agent execution history and automatic formulation of Harness Improvement Plans (HIP).
+- [`update-harness`](skills/update-harness/SKILL.md): Atomic updating and verification of Skills / Agents / Hooks based on formulated HIP.
 
 ### 🏛️ Workspace & Core Primitives (8)
-- [`code-review`](skills/code-review/SKILL.md): 多言語対応コードレビューおよび Effective ルール適用
-- [`string-helpers`](skills/string-helpers/SKILL.md): 大文字小文字変換、スラッグ化、パディング等の文字列操作ユーティリティ
-- [`wiki-ingest`](skills/wiki-ingest/SKILL.md): 外部テキスト・Web ドキュメントの構造化取り込み
-- [`wiki-promote`](skills/wiki-promote/SKILL.md): ノートの昇格、重要サマリー抽出、インデックス更新
-- [`wiki-lint`](skills/wiki-lint/SKILL.md): リンク切れ、孤立ノート、タグ整合性の静的検証
-- [`collection-builder`](skills/collection-builder/SKILL.md): JSON Schema 準拠コレクションの定義と検証
-- [`meta-skill-manager`](skills/meta-skill-manager/SKILL.md): スキルメタデータ管理、依存関係チェック、登録支援
-- [`automation-scheduler`](skills/automation-scheduler/SKILL.md): cron・タイマー・イベント駆動の自動化スケジューリング
+- [`code-review`](skills/code-review/SKILL.md): Multi-language code review and Effective rule enforcement.
+- [`string-helpers`](skills/string-helpers/SKILL.md): String manipulation utilities such as casing, slugification, and padding.
+- [`wiki-ingest`](skills/wiki-ingest/SKILL.md): Structured ingestion of external text and web documents.
+- [`wiki-promote`](skills/wiki-promote/SKILL.md): Note promotion, key summary extraction, and index updating.
+- [`wiki-lint`](skills/wiki-lint/SKILL.md): Static verification of broken links, orphan notes, and tag consistency.
+- [`collection-builder`](skills/collection-builder/SKILL.md): Definition and validation of JSON Schema compliant collections.
+- [`meta-skill-manager`](skills/meta-skill-manager/SKILL.md): Skill metadata management, dependency checking, and registration support.
+- [`automation-scheduler`](skills/automation-scheduler/SKILL.md): Automated scheduling for cron, timer, and event-driven tasks.
 
 ### 🔧 Developer Tools & Environment (7)
-- [`archive-shipped-plans`](skills/archive-shipped-plans/SKILL.md): 完了済み実装計画・ドキュメントのアーカイブとクリーンアップ
-- [`e2e-live`](skills/e2e-live/SKILL.md): E2E ライブテストの実行およびログ検証
-- [`make-e2e-live`](skills/make-e2e-live/SKILL.md): E2E ライブテストシナリオの生成とフィクスチャ構築
-- [`setup-app`](skills/setup-app/SKILL.md): アプリケーション初期セットアップおよび依存関係解決
-- [`setup-ollama-local`](skills/setup-ollama-local/SKILL.md): ローカル LLM (Ollama) 環境の構築とモデル設定
-- [`setup-relay`](skills/setup-relay/SKILL.md): 通信リレーサーバー・MCP リレーの設定
-- [`setup-wizard`](skills/setup-wizard/SKILL.md): 対話型オンボーディングウィザードの実行
+- [`archive-shipped-plans`](skills/archive-shipped-plans/SKILL.md): Archiving and cleanup of completed implementation plans and documents.
+- [`e2e-live`](skills/e2e-live/SKILL.md): Execution of E2E live tests and log validation.
+- [`make-e2e-live`](skills/make-e2e-live/SKILL.md): Generation of E2E live test scenarios and fixture construction.
+- [`setup-app`](skills/setup-app/SKILL.md): Initial application setup and dependency resolution.
+- [`setup-ollama-local`](skills/setup-ollama-local/SKILL.md): Local LLM (Ollama) environment setup and model configuration.
+- [`setup-relay`](skills/setup-relay/SKILL.md): Configuration for communication relay server and MCP relay.
+- [`setup-wizard`](skills/setup-wizard/SKILL.md): Interactive onboarding wizard execution.
 
 ### 💼 Domain & Productivity Presets (8)
-- [`cooking-coach`](skills/cooking-coach/SKILL.md): 食材や栄養バランスに応じたレシピ提案と手順ガイド
-- [`library`](skills/library/SKILL.md): 書籍・文献管理、読書ログ、引用メタデータ整理
-- [`zenn-publisher`](skills/zenn-publisher/SKILL.md): 技術記事（Zenn 等）の執筆・フォーマット検証・公開支援
-- [`presentation-deck`](skills/presentation-deck/SKILL.md): スライド構成案、プレゼンテーション用アウトライン生成
-- [`storyteller`](skills/storyteller/SKILL.md): キャラクター設定、世界観構築、短編シナリオ執筆
-- [`portfolio-tracker`](skills/portfolio-tracker/SKILL.md): 資産配分、ポートフォリオのリバランス・損益トラッキング
-- [`billing-invoice`](skills/billing-invoice/SKILL.md): 請求データからの適格請求書・インボイスフォーマット生成
-- [`edgar-sec-filings`](skills/edgar-sec-filings/SKILL.md): 米国 SEC EDGAR からの企業開示情報・財務データの検索・取得
+- [`cooking-coach`](skills/cooking-coach/SKILL.md): Recipe suggestions and step-by-step guides tailored to ingredients and nutrition.
+- [`library`](skills/library/SKILL.md): Book and literature management, reading logs, and citation metadata organization.
+- [`zenn-publisher`](skills/zenn-publisher/SKILL.md): Writing, format validation, and publishing assistance for technical articles (Zenn, etc.).
+- [`presentation-deck`](skills/presentation-deck/SKILL.md): Slide structure proposals and presentation outline generation.
+- [`storyteller`](skills/storyteller/SKILL.md): Character creation, world-building, and short scenario writing.
+- [`portfolio-tracker`](skills/portfolio-tracker/SKILL.md): Asset allocation, portfolio rebalancing, and P&L tracking.
+- [`billing-invoice`](skills/billing-invoice/SKILL.md): Qualified invoice and billing format generation from billing data.
+- [`edgar-sec-filings`](skills/edgar-sec-filings/SKILL.md): Search and retrieval of corporate filings and financial data from US SEC EDGAR.
 
 ---
 
-## ⚡ コマンド (Commands)
+## ⚡ Commands
 
-| コマンド | ファイル | 説明 |
+| Command | File | Description |
 | :--- | :--- | :--- |
-| `/explain` | [`commands/explain.md`](commands/explain.md) | 指定されたコードや概念の詳細解説 |
-| `/code-review-subagent` | [`commands/code-review-subagent.md`](commands/code-review-subagent.md) | 専門サブエージェント群による多面的な並列コードレビュー |
-| `/retrospective-harness` | [`commands/retrospective-harness.md`](commands/retrospective-harness.md) | ハーネス自己診断と改善計画 (HIP) 策定 |
-| `/update-harness` | [`commands/update-harness.md`](commands/update-harness.md) | 改善計画 (HIP) に基づくハーネス自動更新 |
+| `/explain` | [`commands/explain.md`](commands/explain.md) | Detailed explanation of specified code or concepts. |
+| `/code-review-subagent` | [`commands/code-review-subagent.md`](commands/code-review-subagent.md) | Multi-faceted parallel code review using specialized sub-agents. |
+| `/retrospective-harness` | [`commands/retrospective-harness.md`](commands/retrospective-harness.md) | Harness self-diagnosis and Harness Improvement Plan (HIP) formulation. |
+| `/update-harness` | [`commands/update-harness.md`](commands/update-harness.md) | Automated harness updates based on the Improvement Plan (HIP). |
 
 ---
 
-## 📂 リポジトリ構成概要
+## 📂 Repository Structure Overview
 
 ```text
 /
-├── skills/              # Agent Skills Standard 準拠スキル (Master)
-├── agents/              # 役割特化エージェント・ペルソナ定義 (Master)
-├── hooks/               # 決定論的ライフサイクルフック (hooks.json 等)
-├── commands/            # スラッシュコマンド・再利用可能プロンプト
-├── instructions/        # コーディング規約・リポジトリ共通ルール
-├── contexts/            # アーキテクチャおよびプロジェクトコンテキスト
-├── scripts/             # セキュリティ監査 & APM 同期スクリプト
-├── docs/                # 詳細カテゴリ別技術ドキュメント
-├── .claude-plugin/      # Claude Code プラグインマニフェスト (Master)
-├── .github/workflows/   # CI/CD パイプライン (security-audit.yml, ci.yml)
-├── .apm/                # APM 下位互換レイヤー (Master から自動生成)
-└── apm.yml              # APM マルチターゲット設定ファイル
+├── skills/              # Agent Skills Standard compliant skills (Master)
+├── agents/              # Domain-specialized agents and persona definitions (Master)
+├── hooks/               # Deterministic lifecycle hooks (hooks.json, etc.)
+├── commands/            # Slash commands and reusable prompt instructions
+├── instructions/        # Coding standards and common repository rules
+├── contexts/            # Architecture and project context specifications
+├── scripts/             # Security auditing & APM synchronization scripts
+├── docs/                # Detailed technical documentation by category
+├── .claude-plugin/      # Claude Code plugin manifest (Master)
+├── .github/workflows/   # CI/CD pipelines (security-audit.yml, ci.yml)
+├── .apm/                # APM backward-compatibility layer (auto-generated from Master)
+└── apm.yml              # APM multi-target configuration file
 ```
 
 ---
 
-## 🤝 コミュニティと貢献 (Contributing)
+## 🤝 Community & Contributing
 
-- [貢献ガイドライン (CONTRIBUTING.md)](CONTRIBUTING.md)
-- [行動規範 (CODE_OF_CONDUCT.md)](CODE_OF_CONDUCT.md)
-- [ライセンス (LICENSE - MIT License)](LICENSE)
+- [Contribution Guidelines (CONTRIBUTING.md)](CONTRIBUTING.md)
+- [Code of Conduct (CODE_OF_CONDUCT.md)](CODE_OF_CONDUCT.md)
+- [License (LICENSE - MIT License)](LICENSE)
