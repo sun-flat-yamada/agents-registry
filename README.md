@@ -80,6 +80,97 @@ powershell -ExecutionPolicy Bypass -File ./scripts/sync-apm.ps1
 
 ---
 
+## 🤖 登録エージェント一覧 (19 Agents)
+
+本レジストリには、専門ドメインに特化した 19 のエージェント（`agents/*.md`）が収録されています：
+
+### 🧠 Harness Engineering (自己診断・改善)
+| エージェント | 説明 |
+| :--- | :--- |
+| [`retrospective-harness-agent`](agents/retrospective-harness-agent.md) | 過去セッション履歴やエラーログからボトルネックを診断し、Harness Improvement Plan (HIP) を策定する診断エージェント |
+| [`update-harness-agent`](agents/update-harness-agent.md) | HIP 計画に基づき、Skills、Agents、Hooks、Rules をアトミックかつ安全に適用・更新する適用エージェント |
+
+### 🛡️ Code Review Suite (コード品質・セキュリティ)
+| エージェント | 説明 |
+| :--- | :--- |
+| [`code-reviewer`](agents/code-reviewer.md) | コード品質、セキュリティ、パフォーマンス、保守性を多角的にレビューするメインエージェント |
+| [`code-review-orchestrator`](agents/code-review-orchestrator.md) | 4つの専門レビューエージェントを並列起動し、重複排除・重要度ソートされた統合レポートを生成 |
+| [`reviewer-security`](agents/reviewer-security.md) | OWASP Top 10、脆弱性、入力検証、暗号化に特化したセキュリティ専門エージェント |
+| [`reviewer-memory-safety`](agents/reviewer-memory-safety.md) | メモリ安全性、リソースリーク、並行性・スレッドセーフティに特化した専門エージェント |
+| [`reviewer-style-quality`](agents/reviewer-style-quality.md) | クリーンコード、命名規則、デザインパターン、可読性に特化した専門エージェント |
+| [`reviewer-effective`](agents/reviewer-effective.md) | Effective シリーズ（C++, C#, Java, Python 等）の言語別イディオム専門エージェント |
+
+### 🏛️ Workspace & Knowledge Core (自己改善ワークスペース)
+| エージェント | 説明 |
+| :--- | :--- |
+| [`workspace-agent`](agents/workspace-agent.md) | 『The Workspace Is the Self-Improving Agent』思想に基づく Wiki/Collection/Automation の自律運用エージェント |
+| [`collection-architect`](agents/collection-architect.md) | コレクションスキーマ設計、データモデリング、整合性検証を担うアーキテクトエージェント |
+| [`wiki-curator`](agents/wiki-curator.md) | ナレッジベースの構造化、ノートの昇格 (Promote)、リント、定期保守を担うキュレーターエージェント |
+
+### 🎭 Specialized Roles & Personas (各種業務・専門ペルソナ)
+| エージェント | 説明 |
+| :--- | :--- |
+| [`agent-personal`](agents/agent-personal.md) | 個人生産性向上、タスク整理、日々の意思決定を支援するパーソナルコンパニオン |
+| [`agent-office`](agents/agent-office.md) | ビジネス文書作成、議事録要約、オフィスワークフローを支援するオフィスアシスタント |
+| [`agent-guide`](agents/agent-guide.md) | システムやツールの使い方、オンボーディング、リファレンス案内を行うガイドエージェント |
+| [`agent-artist`](agents/agent-artist.md) | クリエイティブ構想、プロンプト設計、ビジュアルアイディア創出を支援するクリエイター |
+| [`agent-tutor`](agents/agent-tutor.md) | 段階的なカリキュラム設計、概念解説、理解度チェックを行う個別指導チューター |
+| [`agent-storyteller`](agents/agent-storyteller.md) | 世界観構築、キャラクター設定、ナラティブ執筆を行うストーリーテラー |
+| [`agent-accounting`](agents/agent-accounting.md) | 請求書・経費計算・帳簿データ整理を支援するアカウンティングエージェント |
+| [`agent-investor`](agents/agent-investor.md) | ポートフォリオ分析・市場データ・財務仮説検証を支援するインベスターエージェント |
+
+---
+
+## 🛠️ 登録スキル一覧 (25 Skills)
+
+全スキルは **Agent Skills Standard (`skills/<slug>/SKILL.md`)** に完全準拠しています：
+
+### 🧠 Harness Engineering & Optimization (2)
+- [`retrospective-harness`](skills/retrospective-harness/SKILL.md): エージェント実行履歴の自己診断と Harness Improvement Plan (HIP) の自動策定
+- [`update-harness`](skills/update-harness/SKILL.md): 策定された HIP に基づく Skills / Agents / Hooks のアトミック更新と検証
+
+### 🏛️ Workspace & Core Primitives (8)
+- [`code-review`](skills/code-review/SKILL.md): 多言語対応コードレビューおよび Effective ルール適用
+- [`string-helpers`](skills/string-helpers/SKILL.md): 大文字小文字変換、スラッグ化、パディング等の文字列操作ユーティリティ
+- [`wiki-ingest`](skills/wiki-ingest/SKILL.md): 外部テキスト・Web ドキュメントの構造化取り込み
+- [`wiki-promote`](skills/wiki-promote/SKILL.md): ノートの昇格、重要サマリー抽出、インデックス更新
+- [`wiki-lint`](skills/wiki-lint/SKILL.md): リンク切れ、孤立ノート、タグ整合性の静的検証
+- [`collection-builder`](skills/collection-builder/SKILL.md): JSON Schema 準拠コレクションの定義と検証
+- [`meta-skill-manager`](skills/meta-skill-manager/SKILL.md): スキルメタデータ管理、依存関係チェック、登録支援
+- [`automation-scheduler`](skills/automation-scheduler/SKILL.md): cron・タイマー・イベント駆動の自動化スケジューリング
+
+### 🔧 Developer Tools & Environment (7)
+- [`archive-shipped-plans`](skills/archive-shipped-plans/SKILL.md): 完了済み実装計画・ドキュメントのアーカイブとクリーンアップ
+- [`e2e-live`](skills/e2e-live/SKILL.md): E2E ライブテストの実行およびログ検証
+- [`make-e2e-live`](skills/make-e2e-live/SKILL.md): E2E ライブテストシナリオの生成とフィクスチャ構築
+- [`setup-app`](skills/setup-app/SKILL.md): アプリケーション初期セットアップおよび依存関係解決
+- [`setup-ollama-local`](skills/setup-ollama-local/SKILL.md): ローカル LLM (Ollama) 環境の構築とモデル設定
+- [`setup-relay`](skills/setup-relay/SKILL.md): 通信リレーサーバー・MCP リレーの設定
+- [`setup-wizard`](skills/setup-wizard/SKILL.md): 対話型オンボーディングウィザードの実行
+
+### 💼 Domain & Productivity Presets (8)
+- [`cooking-coach`](skills/cooking-coach/SKILL.md): 食材や栄養バランスに応じたレシピ提案と手順ガイド
+- [`library`](skills/library/SKILL.md): 書籍・文献管理、読書ログ、引用メタデータ整理
+- [`zenn-publisher`](skills/zenn-publisher/SKILL.md): 技術記事（Zenn 等）の執筆・フォーマット検証・公開支援
+- [`presentation-deck`](skills/presentation-deck/SKILL.md): スライド構成案、プレゼンテーション用アウトライン生成
+- [`storyteller`](skills/storyteller/SKILL.md): キャラクター設定、世界観構築、短編シナリオ執筆
+- [`portfolio-tracker`](skills/portfolio-tracker/SKILL.md): 資産配分、ポートフォリオのリバランス・損益トラッキング
+- [`billing-invoice`](skills/billing-invoice/SKILL.md): 請求データからの適格請求書・インボイスフォーマット生成
+- [`edgar-sec-filings`](skills/edgar-sec-filings/SKILL.md): 米国 SEC EDGAR からの企業開示情報・財務データの検索・取得
+
+---
+
+## ⚡ コマンド (Commands)
+
+| コマンド | ファイル | 説明 |
+| :--- | :--- | :--- |
+| `/explain` | [`commands/explain.md`](commands/explain.md) | 指定されたコードや概念の詳細解説 |
+| `/code-review-subagent` | [`commands/code-review-subagent.md`](commands/code-review-subagent.md) | 専門サブエージェント群による多面的な並列コードレビュー |
+| `/retrospective-harness` | [`commands/retrospective-harness.md`](commands/retrospective-harness.md) | ハーネス自己診断と改善計画 (HIP) 策定 |
+| `/update-harness` | [`commands/update-harness.md`](commands/update-harness.md) | 改善計画 (HIP) に基づくハーネス自動更新 |
+
+---
+
 ## 📂 リポジトリ構成概要
 
 ```text

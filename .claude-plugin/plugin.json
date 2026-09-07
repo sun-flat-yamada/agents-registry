@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "agent-registry-bundle",
-  "version": "1.1.0",
-  "description": "Unified Agent & Skills Registry supporting Claude Plugin and APM standards. Features Harness Engineering (retrospective-harness & update-harness), Code Reviewers, and Workspace/Wiki/Collection primitives.",
+  "version": "1.2.0",
+  "description": "Comprehensive Agent & Skills Registry supporting Claude Plugin and APM standards. Features Harness Engineering, Code Reviewers, and full suite of Workspace/Wiki/Domain primitives.",
   "author": {
     "name": "sun_flat"
   },
@@ -16,7 +16,17 @@
     "code-review",
     "wiki",
     "collection",
-    "workspace"
+    "workspace",
+    "accounting",
+    "investor",
+    "edgar",
+    "storyteller",
+    "presentation",
+    "tutor",
+    "artist",
+    "guide",
+    "library",
+    "cooking"
   ],
   "skills": [
     "./skills/code-review",
@@ -28,7 +38,22 @@
     "./skills/meta-skill-manager",
     "./skills/automation-scheduler",
     "./skills/retrospective-harness",
-    "./skills/update-harness"
+    "./skills/update-harness",
+    "./skills/archive-shipped-plans",
+    "./skills/e2e-live",
+    "./skills/make-e2e-live",
+    "./skills/setup-app",
+    "./skills/setup-ollama-local",
+    "./skills/setup-relay",
+    "./skills/setup-wizard",
+    "./skills/cooking-coach",
+    "./skills/library",
+    "./skills/zenn-publisher",
+    "./skills/presentation-deck",
+    "./skills/storyteller",
+    "./skills/portfolio-tracker",
+    "./skills/billing-invoice",
+    "./skills/edgar-sec-filings"
   ],
   "agents": [
     "./agents/code-reviewer.md",
@@ -41,7 +66,15 @@
     "./agents/collection-architect.md",
     "./agents/wiki-curator.md",
     "./agents/retrospective-harness-agent.md",
-    "./agents/update-harness-agent.md"
+    "./agents/update-harness-agent.md",
+    "./agents/agent-personal.md",
+    "./agents/agent-office.md",
+    "./agents/agent-guide.md",
+    "./agents/agent-artist.md",
+    "./agents/agent-tutor.md",
+    "./agents/agent-storyteller.md",
+    "./agents/agent-accounting.md",
+    "./agents/agent-investor.md"
   ],
   "hooks": "./hooks/hooks.json",
   "commands": [

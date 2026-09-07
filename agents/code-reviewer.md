@@ -1,4 +1,5 @@
 ---
+name: code-reviewer
 description: Specialized AI agent for code review and security audits.
 ---
 # Code Reviewer Persona

@@ -1,4 +1,5 @@
 ---
+name: reviewer-style-quality
 description: Specialized reviewer sub-agent focusing on clean code, naming conventions, readability, maintainability, and design patterns.
 ---
 # Style & Quality Reviewer Persona
