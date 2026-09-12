@@ -8,6 +8,7 @@
 [![Security Audited](https://img.shields.io/badge/Security-Cisco%20%26%20NVIDIA%20Audited-success.svg)](docs/security-audit.md)
 [![Harness Engineering](https://img.shields.io/badge/Harness%20Engineering-RHO%20Enabled-orange.svg)](docs/harness-engineering.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/sun.flat.yamada)
 
 This repository is a hybrid Agent Registry / Template that adopts de facto standards (**Claude Code Plugin format & Agent Skills Standard**) as the Master (Source of Truth), while fully supporting multi-harness distribution (Claude Code, Cursor, Copilot, Gemini) via **Microsoft APM (Agent Package Manager)**.
 
@@ -198,3 +199,11 @@ All skills fully comply with the **Agent Skills Standard (`skills/<slug>/SKILL.m
 - [Contribution Guidelines (CONTRIBUTING.md)](CONTRIBUTING.md)
 - [Code of Conduct (CODE_OF_CONDUCT.md)](CODE_OF_CONDUCT.md)
 - [License (LICENSE - MIT License)](LICENSE)
+
+---
+
+## 🤝 Contribution & Support
+
+Contributions are welcome! If you find this tool useful, please consider supporting its development.
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/sun.flat.yamada)

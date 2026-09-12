@@ -8,6 +8,7 @@
 [![Security Audited](https://img.shields.io/badge/Security-Cisco%20%26%20NVIDIA%20Audited-success.svg)](docs/security-audit.md)
 [![Harness Engineering](https://img.shields.io/badge/Harness%20Engineering-RHO%20Enabled-orange.svg)](docs/harness-engineering.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/sun.flat.yamada)
 
 本リポジトリは、AI エージェントおよびスキルのパッケージングにおけるデファクトスタンダード（**Claude Code Plugin 形式 & Agent Skills Standard**）を Master (Source of Truth) として採用し、**Microsoft APM (Agent Package Manager)** によるマルチハーネス配信（Claude Code, Cursor, Copilot, Gemini）を完全サポートするハイブリッド構成の Agent Registry / Template です。
 
@@ -198,3 +199,11 @@ powershell -ExecutionPolicy Bypass -File ./scripts/sync-apm.ps1
 - [貢献ガイドライン (CONTRIBUTING.md)](CONTRIBUTING.md)
 - [行動規範 (CODE_OF_CONDUCT.md)](CODE_OF_CONDUCT.md)
 - [ライセンス (LICENSE - MIT License)](LICENSE)
+
+---
+
+## 🤝 Contribution & Support
+
+Contributions are welcome! If you find this tool useful, please consider supporting its development.
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/sun.flat.yamada)
