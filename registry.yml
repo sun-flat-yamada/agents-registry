@@ -8,6 +8,8 @@
 #               An "entry" is one entry point (skill / agent / command). It may
 #               bundle sub-components (e.g. a review orchestrator + sub-agents).
 #   candidates: items under evaluation for the slot (not yet selected)
+#   source:     in-house | vendored (copied verbatim, upstream commit pinned)
+#               | upstream-plugin (installed from the official marketplace)
 #   status:     empty | provisional | selected
 #               provisional = mapped from existing assets, not yet compared
 #               against official sources (resolved in the next curation PR)
@@ -22,25 +24,54 @@ slots:
     phase: 要求定義
     pairs_with: V8-acceptance-test
     goal: 曖昧な要望を、検証可能な要求（受入基準つき）に落とす
-    status: empty
-    selected: null
+    status: selected
+    selected:
+      path: skills/requirements-definition
+      source: in-house
+      reason: >-
+        公式に要求定義専用のものはない。公式 feature-dev の Discovery / Clarifying
+        Questions（質問をまとめて出し、回答を待つ）と、everything-claude-code の
+        planner の「成功基準・前提を明記する」考え方を取り込み、REQ-n / AC-n で
+        V8 に渡せる形にした。
+      ideas_from:
+        - anthropics/claude-plugins-official plugins/feature-dev/commands/feature-dev.md (Phase 1, 3)
+        - worldflowai/everything-claude-code agents/planner.md
     candidates: []
 
   - id: V2-architecture
     phase: 基本設計（アーキテクチャ設計）
     pairs_with: V7-system-test
     goal: システム構成・境界・主要な技術判断を決め、記録（ADR 等）に残す
-    status: empty
-    selected: null
-    candidates:
-      - path: chatmodes/architect.md
+    status: selected
+    selected:
+      path: skills/architecture-design
+      source: in-house
+      components:
+        - agents/code-explorer.md
+      reason: >-
+        公式 feature-dev の「code-explorer を並列で走らせて既存コードを把握し、
+        2〜3 案を比較して推奨し、ユーザーに選ばせる」流れを中心に据え、
+        ADR 記録と ST-n（V7 への受け渡し）を加えた。
+      ideas_from:
+        - anthropics/claude-plugins-official plugins/feature-dev (Phase 2, 4)
+        - worldflowai/everything-claude-code agents/architect.md (ADR)
+    candidates: []
 
   - id: V3-detailed-design
     phase: 詳細設計
     pairs_with: V6-integration-test
     goal: モジュール単位のインターフェース・データ構造・処理手順を実装可能な粒度で設計する
-    status: empty
-    selected: null
+    status: selected
+    selected:
+      path: skills/detailed-design
+      source: in-house
+      components:
+        - agents/code-architect.md
+        - agents/type-design-analyzer.md
+      reason: >-
+        公式 code-architect の実装ブループリント（ファイル・コンポーネント・データフロー・
+        ビルド順序）に、IF-n の契約記述と IT-n（V6 への受け渡し）、公式
+        type-design-analyzer による型の事前レビューを組み合わせた。
     candidates: []
 
   # ------------------------------------------------------------------ bottom --
@@ -48,47 +79,83 @@ slots:
     phase: 実装
     pairs_with: V5-unit-test
     goal: 設計に沿って、小さく検証しながらコードを書く
-    status: empty
-    selected: null
-    candidates:
-      - path: instructions/typescript-rules.md
-      - path: skills/string-helpers
+    status: selected
+    selected:
+      path: skills/implementation-loop
+      source: in-house
+      components:
+        - agents/code-simplifier.md
+      reason: >-
+        ビルド順序ごとに「テスト先行 → 最小実装 → プロジェクト自身のビルド・型・lint・
+        テストで検証」を回し、最後に公式 code-simplifier で振る舞いを変えずに整える。
+        everything-claude-code の verification-loop は npm 固定だったため、
+        プロジェクトのコマンドを探す形に一般化して取り込んだ。
+      ideas_from:
+        - anthropics/claude-plugins-official plugins/code-simplifier
+        - worldflowai/everything-claude-code skills/verification-loop
+    candidates: []
 
   # --------------------------------------------------------------- right side --
   - id: V5-unit-test
     phase: 単体テスト
     pairs_with: V4-implementation
     goal: 関数・クラス単位の振る舞いをテストで固定する（TDD を含む）
-    status: empty
-    selected: null
+    status: selected
+    selected:
+      path: skills/unit-test-tdd
+      source: in-house
+      components:
+        - agents/pr-test-analyzer.md
+      reason: >-
+        公式に TDD 専用のものはない。everything-claude-code の tdd-guide の
+        Red-Green-Refactor は今も有効なので取り込み、カバレッジ 80% の数値目標は
+        外した。仕上げに公式 pr-test-analyzer でテストの抜けを確認する。
+      ideas_from:
+        - worldflowai/everything-claude-code agents/tdd-guide.md, skills/tdd-workflow
+        - anthropics/claude-plugins-official plugins/pr-review-toolkit/agents/pr-test-analyzer.md
     candidates: []
 
   - id: V6-integration-test
     phase: 結合テスト
     pairs_with: V3-detailed-design
     goal: モジュール間・外部依存との接続をテストで検証する
-    status: empty
-    selected: null
+    status: selected
+    selected:
+      path: skills/integration-test
+      source: in-house
+      reason: >-
+        公式・参照元ともに結合テスト専用のものはないため新規作成。V3 の IF-n / IT-n を
+        起点に、安価なものは本物（使い捨てコンテナ等）を使い、外部サービスだけ偽物にする。
     candidates: []
 
   - id: V7-system-test
     phase: システムテスト
     pairs_with: V2-architecture
     goal: 実際に動くシステムを E2E で検証する
-    status: provisional
+    status: selected
     selected:
-      path: skills/e2e-live
+      path: skills/system-test
       source: in-house
-      reason: 既存資産からの暫定割当。公式ソースとの比較は未実施
-    candidates:
-      - path: skills/make-e2e-live
+      components:
+        - skills/webapp-testing
+      reason: >-
+        Web UI の操作は公式 anthropics/skills の webapp-testing（Playwright、
+        サーバー起動スクリプト付き）を使う。Web 以外（API・CLI）も扱えるよう、
+        入口は ST-n を起点にする汎用の system-test にした。旧 e2e-live は特定アプリ
+        向けだったため退避。
+    candidates: []
 
   - id: V8-acceptance-test
     phase: 受入テスト
     pairs_with: V1-requirements
     goal: V1 の受入基準に対して完成物を確認し、合否と根拠を残す
-    status: empty
-    selected: null
+    status: selected
+    selected:
+      path: skills/acceptance-test
+      source: in-house
+      reason: >-
+        公式・参照元ともに受入テスト専用のものはないため新規作成。V1 の AC-n ごとに
+        証跡つきで合否を出し、不合格は戻るべき工程を示す。最終判断はユーザー。
     candidates: []
 
   # ------------------------------------------------------------ cross-cutting --
@@ -96,30 +163,45 @@ slots:
     phase: 横断：コードレビュー
     pairs_with: null
     goal: 変更差分の正しさ・品質を、マージ前に確認する
-    status: provisional
+    status: selected
     selected:
-      path: skills/code-review
-      source: in-house
-      components:
-        - agents/code-review-orchestrator.md
-        - agents/code-reviewer.md
-        - agents/reviewer-effective.md
-        - agents/reviewer-memory-safety.md
-        - agents/reviewer-style-quality.md
-        - commands/code-review-subagent.md
-      reason: 既存資産からの暫定割当。公式ソースとの比較は未実施
-    candidates: []
+      path: commands/code-review.md
+      source: vendored
+      upstream:
+        repo: anthropics/claude-plugins-official
+        path: plugins/code-review/commands/code-review.md
+        commit: f8c5e7a1dcb71b10cb74586224b5401f3de5db28
+        license: Apache-2.0
+      reason: >-
+        指摘ごとに別エージェントで裏取りし、確度の高いものだけを出す設計で、
+        誤検知が少ない。旧 in-house の code-review（5 観点の並列レビュー）は
+        検証ステップがなく、こちらに置き換えた。
+    candidates:
+      - path: anthropics/claude-plugins-official plugins/pr-review-toolkit
+        note: 観点は広いが指摘が多くなりやすい。一部エージェント（pr-test-analyzer 等）は他の枠で採用済み
 
   - id: X2-security
     phase: 横断：セキュリティ
     pairs_with: null
     goal: 設計・実装・依存関係の脆弱性を検出し、対処方針を示す
-    status: provisional
+    status: selected
     selected:
-      path: agents/reviewer-security.md
-      source: in-house
-      reason: 既存資産からの暫定割当。公式ソースとの比較は未実施
-    candidates: []
+      path: claude-security@claude-plugins-official
+      source: upstream-plugin
+      upstream:
+        repo: anthropics/claude-plugins-official
+        path: plugins/claude-security
+        commit: f8c5e7a1dcb71b10cb74586224b5401f3de5db28
+        license: Apache-2.0
+      install: /plugin install claude-security@claude-plugins-official
+      reason: >-
+        脅威モデル作成・探索・全指摘の独立検証・パッチ提案まで行い、SARIF も出せる。
+        スクリプトとワークフローを含む大きなプラグインで、取り込むと追従が難しいため
+        公式マーケットプレイスから入れる形にした。旧 reviewer-security（21 行の
+        チェックリスト型）は退避。GitHub Copilot CLI での扱いはステップ3で検討。
+    candidates:
+      - path: anthropics/claude-plugins-official plugins/security-guidance
+        note: 編集時のフックで警告する常駐型。X2 の入口とは役割が違うため候補に留める
 
 # ------------------------------------------------------------------------------
 # Not a V-model slot: tooling that maintains this registry itself.
@@ -134,17 +216,7 @@ registry_tooling:
   - commands/retrospective-harness.md
   - commands/update-harness.md
 
-# ------------------------------------------------------------------------------
-# Development-related assets not yet assigned to a slot.
-# Each is either assigned, merged into a slot entry, or archived in the next
-# curation PR.
-# ------------------------------------------------------------------------------
-unassigned:
-  - skills/archive-shipped-plans
-  - skills/setup-app
-  - skills/setup-ollama-local
-  - commands/explain.md
-  - contexts/project-structure.md
-
-# Non-development assets are kept in archive/non-dev/ (not distributed).
-archive: archive/non-dev/
+# Retired assets are kept in archive/ (not distributed).
+archive:
+  - archive/non-dev/       # not software development
+  - archive/dev-retired/   # development-related, replaced by a slot entry or outside every slot
