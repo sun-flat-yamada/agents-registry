@@ -144,3 +144,11 @@ python scripts/security-audit.py [OPTIONS]
 
 - **ブロック基準**: 原則として重大度 `HIGH` および `CRITICAL`（プロンプトインジェクション、認証情報のハードコード、任意シェル実行等）が 1 件でも検知された場合、CI は失敗ステータスとなりマージがブロックされます。
 - **誤検知（False Positive）対応**: 意図した検証コード等の正当な記述である場合は、NVIDIA SkillSpector のベースライン機能（`skillspector baseline <target> -o .skillspector-baseline.yaml`）または Built-in ルールへの除外設定を行い管理します。
+
+## 7. レビュー済み例外（許容リスク）
+
+スキャナーの指摘が設計上の意図どおりで、外部の入力が届かないなど実害がないと確認できた場合に限り、[`security-audit-exceptions.json`](../security-audit-exceptions.json) に例外として登録できます。
+
+- 対象（`target`）、スキャナー（`scanner`）、指摘メッセージに含まれる文字列（`message_contains`、すべて一致が条件）で 1 件ずつ絞り込みます。
+- 一致した指摘は `info` に下げられ、`[accepted risk: <理由>]` を付けてレポートに残ります。指摘そのものは消えません。
+- `justification`（理由）、`reviewed`（確認日）、`approved_by`（承認者）を必ず書き、追加は人間がレビューする PR で行います。

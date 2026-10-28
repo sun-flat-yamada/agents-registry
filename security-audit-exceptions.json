@@ -1,0 +1,12 @@
+{
+  "exceptions": [
+    {
+      "target": "skills/webapp-testing",
+      "scanner": "cisco-skill-scanner",
+      "message_contains": ["subprocess.Popen", "shell=True"],
+      "justification": "with_server.py runs the server command the operator passes with --server (e.g. 'cd backend && npm run dev'), so the shell is intended and no untrusted input reaches it. Vendored verbatim from anthropics/skills.",
+      "reviewed": "2026-10-28",
+      "approved_by": "sun-flat-yamada"
+    }
+  ]
+}
