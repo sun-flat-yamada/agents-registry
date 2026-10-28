@@ -40,6 +40,7 @@
 
 - **レジストリ運用ツール**（`retrospective-harness`、`update-harness`、`meta-skill-manager` など）は、このレジストリ自体を保守するための道具です。残しますが、枠の 1 つには数えません。
 - **開発外のもの**（会計、投資、料理、個人ワークスペースなど）は [`archive/non-dev/`](../archive/non-dev/) に退避し、配信対象から外しています。
+- **置き換えたもの・どの枠にも入らない開発系のもの**は [`archive/dev-retired/`](../archive/dev-retired/) に退避しています。
 
 ---
 

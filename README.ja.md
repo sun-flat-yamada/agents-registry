@@ -86,33 +86,33 @@ powershell -ExecutionPolicy Bypass -File ./scripts/sync-apm.ps1
 
 ## 🧭 V字モデルの枠（工程ごとにベストを 1 つ）
 
-本レジストリは、ソフトウェア開発の **V字モデルの工程ごとに、ベストを 1 つだけ**登録します。枠の定義・選定基準・入れ替えルールは [docs/v-model-skeleton.md](docs/v-model-skeleton.md)、現在の割当は [`registry.yml`](registry.yml) を参照してください。
+本レジストリは、ソフトウェア開発の **V字モデルの工程ごとに、ベストを 1 つだけ**登録します。枠の定義・選定基準・入れ替えルールは [docs/v-model-skeleton.md](docs/v-model-skeleton.md)、現在の割当・出典・選定理由は [`registry.yml`](registry.yml) を参照してください。
 
-| 枠 | 工程 | 現在の登録 | 状態 |
-| :--- | :--- | :--- | :--- |
-| V1 | 要求定義 | — | empty |
-| V2 | 基本設計 | — | empty |
-| V3 | 詳細設計 | — | empty |
-| V4 | 実装 | — | empty |
-| V5 | 単体テスト | — | empty |
-| V6 | 結合テスト | — | empty |
-| V7 | システムテスト | [`e2e-live`](skills/e2e-live/SKILL.md) | provisional |
-| V8 | 受入テスト | — | empty |
-| X1 | 横断：コードレビュー | [`code-review`](skills/code-review/SKILL.md)（オーケストレーター＋レビュアー群） | provisional |
-| X2 | 横断：セキュリティ | [`reviewer-security`](agents/reviewer-security.md) | provisional |
+| 枠 | 工程 | 入口 | 内部で使うもの | 出典 |
+| :--- | :--- | :--- | :--- | :--- |
+| V1 | 要求定義 | [`requirements-definition`](skills/requirements-definition/SKILL.md) | — | in-house |
+| V2 | 基本設計 | [`architecture-design`](skills/architecture-design/SKILL.md) | `code-explorer` | in-house |
+| V3 | 詳細設計 | [`detailed-design`](skills/detailed-design/SKILL.md) | `code-architect`, `type-design-analyzer` | in-house |
+| V4 | 実装 | [`implementation-loop`](skills/implementation-loop/SKILL.md) | `code-simplifier` | in-house |
+| V5 | 単体テスト | [`unit-test-tdd`](skills/unit-test-tdd/SKILL.md) | `pr-test-analyzer` | in-house |
+| V6 | 結合テスト | [`integration-test`](skills/integration-test/SKILL.md) | — | in-house |
+| V7 | システムテスト | [`system-test`](skills/system-test/SKILL.md) | [`webapp-testing`](skills/webapp-testing/SKILL.md) | in-house |
+| V8 | 受入テスト | [`acceptance-test`](skills/acceptance-test/SKILL.md) | — | in-house |
+| X1 | 横断：コードレビュー | [`/code-review`](commands/code-review.md) | — | Anthropic 公式（取り込み） |
+| X2 | 横断：セキュリティ | `claude-security` プラグイン | — | Anthropic 公式（`/plugin install claude-security@claude-plugins-official` で導入） |
 
-*provisional* = 既存資産からの暫定割当で、公式ソースとの比較は未実施です。
+工程間は ID でつながります。要求 `REQ-n`・受入基準 `AC-n`（V1 → V8）、システムテスト観点 `ST-n`（V2 → V7）、インターフェース `IF-n`・結合テスト観点 `IT-n`（V3 → V6）です。「内部で使うもの」のエージェントと `webapp-testing` は Anthropic 公式リポジトリから無改変で取り込んでいます（[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)）。
 
 ### 🧠 レジストリ運用ツール（枠外）
 - [`retrospective-harness`](skills/retrospective-harness/SKILL.md) / [`retrospective-harness-agent`](agents/retrospective-harness-agent.md): エージェント実行履歴の自己診断と Harness Improvement Plan (HIP) の策定。
 - [`update-harness`](skills/update-harness/SKILL.md) / [`update-harness-agent`](agents/update-harness-agent.md): 承認済み HIP のアトミックな適用と検証。
 - [`meta-skill-manager`](skills/meta-skill-manager/SKILL.md): Agent Skills の作成・更新・監査。
 
-### 🗂️ 未割当
-`archive-shipped-plans`、`make-e2e-live`、`setup-app`、`setup-ollama-local`、`string-helpers`、`explain` は開発関連ですが、まだ枠に割り当てていません。次の選定 PR で、枠への割当・既存エントリへの統合・退避のいずれかを決めます。
+### 📦 退避済み
+- [`archive/non-dev/`](archive/non-dev/README.md): 個人・業務・専門ドメイン向け（会計、投資、料理、個人 Wiki/ワークスペースなど）。
+- [`archive/dev-retired/`](archive/dev-retired/README.md): 開発関連のうち、枠のエントリに置き換えたもの（旧コードレビュー一式、`e2e-live`、`reviewer-security` など）と、どの枠にも入らないもの。
 
-### 📦 退避済み（開発外）
-個人・業務・専門ドメイン向けのエージェントとスキル（会計、投資、料理、個人 Wiki/ワークスペースなど）は [`archive/non-dev/`](archive/non-dev/README.md) に退避しました。内容はそのまま残していますが、配信対象からは外しています。
+退避したものは内容をそのまま残していますが、配信対象からは外しています。
 
 ---
 
@@ -120,10 +120,9 @@ powershell -ExecutionPolicy Bypass -File ./scripts/sync-apm.ps1
 
 | コマンド | ファイル | 説明 |
 | :--- | :--- | :--- |
-| `/explain` | [`commands/explain.md`](commands/explain.md) | 指定されたコードや概念の詳細解説 |
-| `/code-review-subagent` | [`commands/code-review-subagent.md`](commands/code-review-subagent.md) | 専門サブエージェント群による多面的な並列コードレビュー |
-| `/retrospective-harness` | [`commands/retrospective-harness.md`](commands/retrospective-harness.md) | ハーネス自己診断と改善計画 (HIP) 策定 |
-| `/update-harness` | [`commands/update-harness.md`](commands/update-harness.md) | 改善計画 (HIP) に基づくハーネス自動更新 |
+| `/code-review` | [`commands/code-review.md`](commands/code-review.md) | X1 枠。PR を複数エージェントで並列レビューし、別エージェントが裏取りできた指摘だけを出します（Anthropic 公式）。 |
+| `/retrospective-harness` | [`commands/retrospective-harness.md`](commands/retrospective-harness.md) | ハーネスの自己診断と Harness Improvement Plan (HIP) の策定。 |
+| `/update-harness` | [`commands/update-harness.md`](commands/update-harness.md) | HIP に基づくハーネスの自動更新。 |
 
 ---
 
@@ -132,13 +131,12 @@ powershell -ExecutionPolicy Bypass -File ./scripts/sync-apm.ps1
 ```text
 /
 ├── registry.yml         # V字モデルの枠ごとの登録内容（各枠ベスト 1 つ）
-├── archive/non-dev/     # 退避した開発外のエージェント・スキル（配信対象外）
+├── archive/             # 退避したエージェント・スキル：non-dev/ と dev-retired/（配信対象外）
+├── licenses/            # 取り込んだ公式ファイルのライセンス（THIRD_PARTY_NOTICES.md 参照）
 ├── skills/              # Agent Skills Standard 準拠スキル (Master)
 ├── agents/              # 役割特化エージェント・ペルソナ定義 (Master)
 ├── hooks/               # 決定論的ライフサイクルフック (hooks.json 等)
 ├── commands/            # スラッシュコマンド・再利用可能プロンプト
-├── instructions/        # コーディング規約・リポジトリ共通ルール
-├── contexts/            # アーキテクチャおよびプロジェクトコンテキスト
 ├── scripts/             # セキュリティ監査 & APM 同期スクリプト
 ├── docs/                # 詳細カテゴリ別技術ドキュメント
 ├── .claude-plugin/      # Claude Code プラグインマニフェスト (Master)

@@ -14,36 +14,30 @@ targets:
 # Primitive definitions and source-of-truth mappings
 primitives:
   skills:
-    - skills/code-review
-    - skills/string-helpers
-    - skills/meta-skill-manager
+    - skills/requirements-definition
+    - skills/architecture-design
+    - skills/detailed-design
+    - skills/implementation-loop
+    - skills/unit-test-tdd
+    - skills/integration-test
+    - skills/system-test
+    - skills/acceptance-test
+    - skills/webapp-testing
     - skills/retrospective-harness
     - skills/update-harness
-    - skills/archive-shipped-plans
-    - skills/e2e-live
-    - skills/make-e2e-live
-    - skills/setup-app
-    - skills/setup-ollama-local
+    - skills/meta-skill-manager
   agents:
-    - agents/code-reviewer.md
-    - agents/code-review-orchestrator.md
-    - agents/reviewer-effective.md
-    - agents/reviewer-memory-safety.md
-    - agents/reviewer-security.md
-    - agents/reviewer-style-quality.md
+    - agents/code-explorer.md
+    - agents/code-architect.md
+    - agents/type-design-analyzer.md
+    - agents/code-simplifier.md
+    - agents/pr-test-analyzer.md
     - agents/retrospective-harness-agent.md
     - agents/update-harness-agent.md
   prompts:
-    - commands/explain.md
-    - commands/code-review-subagent.md
+    - commands/code-review.md
     - commands/retrospective-harness.md
     - commands/update-harness.md
-  instructions:
-    - instructions/typescript-rules.md
-  contexts:
-    - contexts/project-structure.md
-  chatmodes:
-    - chatmodes/architect.md
   hooks:
     - hooks/hooks.json
 

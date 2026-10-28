@@ -86,33 +86,33 @@ Detailed guides, configuration procedures, and architecture specs are organized 
 
 ## 🧭 V-Model Slots (One Best per Phase)
 
-This registry registers **only one best entry per V-model phase slot** for software development. The slot definitions, selection criteria and replacement rule are in [docs/v-model-skeleton.md](docs/v-model-skeleton.md); the current assignment is in [`registry.yml`](registry.yml).
+This registry registers **only one best entry per V-model phase slot** for software development. The slot definitions, selection criteria and replacement rule are in [docs/v-model-skeleton.md](docs/v-model-skeleton.md); the current assignment, sources and reasons are in [`registry.yml`](registry.yml).
 
-| Slot | Phase | Current entry | Status |
-| :--- | :--- | :--- | :--- |
-| V1 | Requirements | — | empty |
-| V2 | Architecture design | — | empty |
-| V3 | Detailed design | — | empty |
-| V4 | Implementation | — | empty |
-| V5 | Unit test | — | empty |
-| V6 | Integration test | — | empty |
-| V7 | System test | [`e2e-live`](skills/e2e-live/SKILL.md) | provisional |
-| V8 | Acceptance test | — | empty |
-| X1 | Code review (cross-cutting) | [`code-review`](skills/code-review/SKILL.md) (orchestrator + reviewer sub-agents) | provisional |
-| X2 | Security (cross-cutting) | [`reviewer-security`](agents/reviewer-security.md) | provisional |
+| Slot | Phase | Entry | Uses | Source |
+| :--- | :--- | :--- | :--- | :--- |
+| V1 | Requirements | [`requirements-definition`](skills/requirements-definition/SKILL.md) | — | in-house |
+| V2 | Architecture design | [`architecture-design`](skills/architecture-design/SKILL.md) | `code-explorer` | in-house |
+| V3 | Detailed design | [`detailed-design`](skills/detailed-design/SKILL.md) | `code-architect`, `type-design-analyzer` | in-house |
+| V4 | Implementation | [`implementation-loop`](skills/implementation-loop/SKILL.md) | `code-simplifier` | in-house |
+| V5 | Unit test | [`unit-test-tdd`](skills/unit-test-tdd/SKILL.md) | `pr-test-analyzer` | in-house |
+| V6 | Integration test | [`integration-test`](skills/integration-test/SKILL.md) | — | in-house |
+| V7 | System test | [`system-test`](skills/system-test/SKILL.md) | [`webapp-testing`](skills/webapp-testing/SKILL.md) | in-house |
+| V8 | Acceptance test | [`acceptance-test`](skills/acceptance-test/SKILL.md) | — | in-house |
+| X1 | Code review (cross-cutting) | [`/code-review`](commands/code-review.md) | — | Anthropic official (vendored) |
+| X2 | Security (cross-cutting) | `claude-security` plugin | — | Anthropic official (install: `/plugin install claude-security@claude-plugins-official`) |
 
-*provisional* = mapped from existing assets and not yet compared against official sources.
+The phases hand off through traceable IDs: requirements `REQ-n` / acceptance criteria `AC-n` (V1 → V8), system-test viewpoints `ST-n` (V2 → V7), and interfaces `IF-n` / integration-test points `IT-n` (V3 → V6). The agents in the *Uses* column (`code-explorer`, `code-architect`, `type-design-analyzer`, `code-simplifier`, `pr-test-analyzer`) and `webapp-testing` are copied verbatim from Anthropic's official repositories; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ### 🧠 Registry Tooling (not a slot)
 - [`retrospective-harness`](skills/retrospective-harness/SKILL.md) / [`retrospective-harness-agent`](agents/retrospective-harness-agent.md): Self-diagnosis of agent execution history and Harness Improvement Plan (HIP) formulation.
 - [`update-harness`](skills/update-harness/SKILL.md) / [`update-harness-agent`](agents/update-harness-agent.md): Atomic, verified application of an approved HIP.
 - [`meta-skill-manager`](skills/meta-skill-manager/SKILL.md): Creating, updating and auditing Agent Skills.
 
-### 🗂️ Not Yet Assigned
-`archive-shipped-plans`, `make-e2e-live`, `setup-app`, `setup-ollama-local`, `string-helpers`, `explain` are development-related but not yet assigned to a slot. Each will be assigned, merged into a slot entry, or archived in the next curation PR.
+### 📦 Archived
+- [`archive/non-dev/`](archive/non-dev/README.md): personal, office and domain agents/skills (accounting, investing, cooking, personal wiki/workspace, etc.).
+- [`archive/dev-retired/`](archive/dev-retired/README.md): development assets replaced by a slot entry (the former code-review suite, `e2e-live`, `reviewer-security`, …) or outside every slot.
 
-### 📦 Archived (non-development)
-Personal, office and domain agents/skills (accounting, investing, cooking, personal wiki/workspace, etc.) were moved to [`archive/non-dev/`](archive/non-dev/README.md). They are kept as-is but are no longer distributed.
+Archived items are kept as-is but are no longer distributed.
 
 ---
 
@@ -120,8 +120,7 @@ Personal, office and domain agents/skills (accounting, investing, cooking, perso
 
 | Command | File | Description |
 | :--- | :--- | :--- |
-| `/explain` | [`commands/explain.md`](commands/explain.md) | Detailed explanation of specified code or concepts. |
-| `/code-review-subagent` | [`commands/code-review-subagent.md`](commands/code-review-subagent.md) | Multi-faceted parallel code review using specialized sub-agents. |
+| `/code-review` | [`commands/code-review.md`](commands/code-review.md) | X1 slot. Reviews a pull request with parallel agents and keeps only findings that an independent agent confirms (Anthropic official). |
 | `/retrospective-harness` | [`commands/retrospective-harness.md`](commands/retrospective-harness.md) | Harness self-diagnosis and Harness Improvement Plan (HIP) formulation. |
 | `/update-harness` | [`commands/update-harness.md`](commands/update-harness.md) | Automated harness updates based on the Improvement Plan (HIP). |
 
@@ -132,13 +131,12 @@ Personal, office and domain agents/skills (accounting, investing, cooking, perso
 ```text
 /
 ├── registry.yml         # V-model slot assignments (one best entry per slot)
-├── archive/non-dev/     # Archived non-development agents & skills (not distributed)
+├── archive/             # Archived agents & skills: non-dev/ and dev-retired/ (not distributed)
+├── licenses/            # Upstream licenses for vendored files (see THIRD_PARTY_NOTICES.md)
 ├── skills/              # Agent Skills Standard compliant skills (Master)
 ├── agents/              # Domain-specialized agents and persona definitions (Master)
 ├── hooks/               # Deterministic lifecycle hooks (hooks.json, etc.)
 ├── commands/            # Slash commands and reusable prompt instructions
-├── instructions/        # Coding standards and common repository rules
-├── contexts/            # Architecture and project context specifications
 ├── scripts/             # Security auditing & APM synchronization scripts
 ├── docs/                # Detailed technical documentation by category
 ├── .claude-plugin/      # Claude Code plugin manifest (Master)
