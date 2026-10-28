@@ -81,10 +81,34 @@ class SecurityAuditor:
         self.strict = strict
         self.verbose = verbose
         self.threshold_score = SEVERITY_LEVELS.get(self.fail_on, 3)
+        self.exceptions = self.load_exceptions()
 
         # External tool availability
         self.cisco_available = shutil.which("skill-scanner") is not None
         self.nvidia_available = shutil.which("skillspector") is not None
+
+    def load_exceptions(self) -> List[Dict[str, Any]]:
+        """Loads reviewed exceptions (accepted risks) from security-audit-exceptions.json."""
+        path = self.root_dir / "security-audit-exceptions.json"
+        if not path.exists():
+            return []
+        with open(path, "r", encoding="utf-8") as fp:
+            return json.load(fp).get("exceptions", [])
+
+    def apply_exceptions(self, target: Dict[str, Any], findings: List[Dict[str, Any]]) -> None:
+        """Downgrades findings matched by a reviewed exception to info, keeping them in the report."""
+        target_path = target["path"].relative_to(self.root_dir).as_posix()
+        for f in findings:
+            for ex in self.exceptions:
+                if (
+                    ex.get("target") == target_path
+                    and ex.get("scanner") == f.get("scanner")
+                    and ex.get("message_contains")
+                    and all(part in f.get("message", "") for part in ex["message_contains"])
+                ):
+                    f["severity"] = "info"
+                    f["message"] = f"[accepted risk: {ex.get('justification', '')}] {f.get('message', '')}"
+                    break
 
     def find_all_targets(self) -> List[Dict[str, Any]]:
         """Finds all skills and agent definitions in the registry."""
@@ -340,6 +364,8 @@ class SecurityAuditor:
 
         if "nvidia" in self.scanners or "all" in self.scanners:
             target_findings.extend(self.run_nvidia_skillspector(target))
+
+        self.apply_exceptions(target, target_findings)
 
         max_score = 0
         for f in target_findings:
