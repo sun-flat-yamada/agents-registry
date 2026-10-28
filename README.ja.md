@@ -77,89 +77,42 @@ powershell -ExecutionPolicy Bypass -File ./scripts/sync-apm.ps1
 
 | ドキュメント | 概要 |
 | :--- | :--- |
+| [🧭 **V字モデル骨格と選定基準**](docs/v-model-skeleton.md) | 工程ごとの枠、選定基準、ベスト 1 つを入れ替えるルール。 |
 | [🛡️ **セキュリティ監査ガイド**](docs/security-audit.md) | Cisco AI Skill Scanner、NVIDIA SkillSpector、Built-in Linter の統合仕様、CLI リファレンス、およびスキル新規追加時の CI/CD 自動稼働パイプライン |
 | [🧠 **Harness Engineering ガイド**](docs/harness-engineering.md) | Retrospective Harness Optimization (RHO) に基づくエージェント環境の自己診断・改善計画 (HIP) 策定・安全な自動更新サイクル |
 | [🚀 **インストールとマルチハーネス配信**](docs/usage-and-deployment.md) | Claude Code での利用方法、Microsoft APM (`apm.yml`) によるマルチプラットフォーム配信、および Master レイヤー自動同期手順 |
 
 ---
 
-## 🤖 登録エージェント一覧 (19 Agents)
+## 🧭 V字モデルの枠（工程ごとにベストを 1 つ）
 
-本レジストリには、専門ドメインに特化した 19 のエージェント（`agents/*.md`）が収録されています：
+本レジストリは、ソフトウェア開発の **V字モデルの工程ごとに、ベストを 1 つだけ**登録します。枠の定義・選定基準・入れ替えルールは [docs/v-model-skeleton.md](docs/v-model-skeleton.md)、現在の割当は [`registry.yml`](registry.yml) を参照してください。
 
-### 🧠 Harness Engineering (自己診断・改善)
-| エージェント | 説明 |
-| :--- | :--- |
-| [`retrospective-harness-agent`](agents/retrospective-harness-agent.md) | 過去セッション履歴やエラーログからボトルネックを診断し、Harness Improvement Plan (HIP) を策定する診断エージェント |
-| [`update-harness-agent`](agents/update-harness-agent.md) | HIP 計画に基づき、Skills、Agents、Hooks、Rules をアトミックかつ安全に適用・更新する適用エージェント |
+| 枠 | 工程 | 現在の登録 | 状態 |
+| :--- | :--- | :--- | :--- |
+| V1 | 要求定義 | — | empty |
+| V2 | 基本設計 | — | empty |
+| V3 | 詳細設計 | — | empty |
+| V4 | 実装 | — | empty |
+| V5 | 単体テスト | — | empty |
+| V6 | 結合テスト | — | empty |
+| V7 | システムテスト | [`e2e-live`](skills/e2e-live/SKILL.md) | provisional |
+| V8 | 受入テスト | — | empty |
+| X1 | 横断：コードレビュー | [`code-review`](skills/code-review/SKILL.md)（オーケストレーター＋レビュアー群） | provisional |
+| X2 | 横断：セキュリティ | [`reviewer-security`](agents/reviewer-security.md) | provisional |
 
-### 🛡️ Code Review Suite (コード品質・セキュリティ)
-| エージェント | 説明 |
-| :--- | :--- |
-| [`code-reviewer`](agents/code-reviewer.md) | コード品質、セキュリティ、パフォーマンス、保守性を多角的にレビューするメインエージェント |
-| [`code-review-orchestrator`](agents/code-review-orchestrator.md) | 4つの専門レビューエージェントを並列起動し、重複排除・重要度ソートされた統合レポートを生成 |
-| [`reviewer-security`](agents/reviewer-security.md) | OWASP Top 10、脆弱性、入力検証、暗号化に特化したセキュリティ専門エージェント |
-| [`reviewer-memory-safety`](agents/reviewer-memory-safety.md) | メモリ安全性、リソースリーク、並行性・スレッドセーフティに特化した専門エージェント |
-| [`reviewer-style-quality`](agents/reviewer-style-quality.md) | クリーンコード、命名規則、デザインパターン、可読性に特化した専門エージェント |
-| [`reviewer-effective`](agents/reviewer-effective.md) | Effective シリーズ（C++, C#, Java, Python 等）の言語別イディオム専門エージェント |
+*provisional* = 既存資産からの暫定割当で、公式ソースとの比較は未実施です。
 
-### 🏛️ Workspace & Knowledge Core (自己改善ワークスペース)
-| エージェント | 説明 |
-| :--- | :--- |
-| [`workspace-agent`](agents/workspace-agent.md) | 『The Workspace Is the Self-Improving Agent』思想に基づく Wiki/Collection/Automation の自律運用エージェント |
-| [`collection-architect`](agents/collection-architect.md) | コレクションスキーマ設計、データモデリング、整合性検証を担うアーキテクトエージェント |
-| [`wiki-curator`](agents/wiki-curator.md) | ナレッジベースの構造化、ノートの昇格 (Promote)、リント、定期保守を担うキュレーターエージェント |
+### 🧠 レジストリ運用ツール（枠外）
+- [`retrospective-harness`](skills/retrospective-harness/SKILL.md) / [`retrospective-harness-agent`](agents/retrospective-harness-agent.md): エージェント実行履歴の自己診断と Harness Improvement Plan (HIP) の策定。
+- [`update-harness`](skills/update-harness/SKILL.md) / [`update-harness-agent`](agents/update-harness-agent.md): 承認済み HIP のアトミックな適用と検証。
+- [`meta-skill-manager`](skills/meta-skill-manager/SKILL.md): Agent Skills の作成・更新・監査。
 
-### 🎭 Specialized Roles & Personas (各種業務・専門ペルソナ)
-| エージェント | 説明 |
-| :--- | :--- |
-| [`agent-personal`](agents/agent-personal.md) | 個人生産性向上、タスク整理、日々の意思決定を支援するパーソナルコンパニオン |
-| [`agent-office`](agents/agent-office.md) | ビジネス文書作成、議事録要約、オフィスワークフローを支援するオフィスアシスタント |
-| [`agent-guide`](agents/agent-guide.md) | システムやツールの使い方、オンボーディング、リファレンス案内を行うガイドエージェント |
-| [`agent-artist`](agents/agent-artist.md) | クリエイティブ構想、プロンプト設計、ビジュアルアイディア創出を支援するクリエイター |
-| [`agent-tutor`](agents/agent-tutor.md) | 段階的なカリキュラム設計、概念解説、理解度チェックを行う個別指導チューター |
-| [`agent-storyteller`](agents/agent-storyteller.md) | 世界観構築、キャラクター設定、ナラティブ執筆を行うストーリーテラー |
-| [`agent-accounting`](agents/agent-accounting.md) | 請求書・経費計算・帳簿データ整理を支援するアカウンティングエージェント |
-| [`agent-investor`](agents/agent-investor.md) | ポートフォリオ分析・市場データ・財務仮説検証を支援するインベスターエージェント |
+### 🗂️ 未割当
+`archive-shipped-plans`、`make-e2e-live`、`setup-app`、`setup-ollama-local`、`string-helpers`、`explain` は開発関連ですが、まだ枠に割り当てていません。次の選定 PR で、枠への割当・既存エントリへの統合・退避のいずれかを決めます。
 
----
-
-## 🛠️ 登録スキル一覧 (25 Skills)
-
-全スキルは **Agent Skills Standard (`skills/<slug>/SKILL.md`)** に完全準拠しています：
-
-### 🧠 Harness Engineering & Optimization (2)
-- [`retrospective-harness`](skills/retrospective-harness/SKILL.md): エージェント実行履歴の自己診断と Harness Improvement Plan (HIP) の自動策定
-- [`update-harness`](skills/update-harness/SKILL.md): 策定された HIP に基づく Skills / Agents / Hooks のアトミック更新と検証
-
-### 🏛️ Workspace & Core Primitives (8)
-- [`code-review`](skills/code-review/SKILL.md): 多言語対応コードレビューおよび Effective ルール適用
-- [`string-helpers`](skills/string-helpers/SKILL.md): 大文字小文字変換、スラッグ化、パディング等の文字列操作ユーティリティ
-- [`wiki-ingest`](skills/wiki-ingest/SKILL.md): 外部テキスト・Web ドキュメントの構造化取り込み
-- [`wiki-promote`](skills/wiki-promote/SKILL.md): ノートの昇格、重要サマリー抽出、インデックス更新
-- [`wiki-lint`](skills/wiki-lint/SKILL.md): リンク切れ、孤立ノート、タグ整合性の静的検証
-- [`collection-builder`](skills/collection-builder/SKILL.md): JSON Schema 準拠コレクションの定義と検証
-- [`meta-skill-manager`](skills/meta-skill-manager/SKILL.md): スキルメタデータ管理、依存関係チェック、登録支援
-- [`automation-scheduler`](skills/automation-scheduler/SKILL.md): cron・タイマー・イベント駆動の自動化スケジューリング
-
-### 🔧 Developer Tools & Environment (7)
-- [`archive-shipped-plans`](skills/archive-shipped-plans/SKILL.md): 完了済み実装計画・ドキュメントのアーカイブとクリーンアップ
-- [`e2e-live`](skills/e2e-live/SKILL.md): E2E ライブテストの実行およびログ検証
-- [`make-e2e-live`](skills/make-e2e-live/SKILL.md): E2E ライブテストシナリオの生成とフィクスチャ構築
-- [`setup-app`](skills/setup-app/SKILL.md): アプリケーション初期セットアップおよび依存関係解決
-- [`setup-ollama-local`](skills/setup-ollama-local/SKILL.md): ローカル LLM (Ollama) 環境の構築とモデル設定
-- [`setup-relay`](skills/setup-relay/SKILL.md): 通信リレーサーバー・MCP リレーの設定
-- [`setup-wizard`](skills/setup-wizard/SKILL.md): 対話型オンボーディングウィザードの実行
-
-### 💼 Domain & Productivity Presets (8)
-- [`cooking-coach`](skills/cooking-coach/SKILL.md): 食材や栄養バランスに応じたレシピ提案と手順ガイド
-- [`library`](skills/library/SKILL.md): 書籍・文献管理、読書ログ、引用メタデータ整理
-- [`zenn-publisher`](skills/zenn-publisher/SKILL.md): 技術記事（Zenn 等）の執筆・フォーマット検証・公開支援
-- [`presentation-deck`](skills/presentation-deck/SKILL.md): スライド構成案、プレゼンテーション用アウトライン生成
-- [`storyteller`](skills/storyteller/SKILL.md): キャラクター設定、世界観構築、短編シナリオ執筆
-- [`portfolio-tracker`](skills/portfolio-tracker/SKILL.md): 資産配分、ポートフォリオのリバランス・損益トラッキング
-- [`billing-invoice`](skills/billing-invoice/SKILL.md): 請求データからの適格請求書・インボイスフォーマット生成
-- [`edgar-sec-filings`](skills/edgar-sec-filings/SKILL.md): 米国 SEC EDGAR からの企業開示情報・財務データの検索・取得
+### 📦 退避済み（開発外）
+個人・業務・専門ドメイン向けのエージェントとスキル（会計、投資、料理、個人 Wiki/ワークスペースなど）は [`archive/non-dev/`](archive/non-dev/README.md) に退避しました。内容はそのまま残していますが、配信対象からは外しています。
 
 ---
 
@@ -178,6 +131,8 @@ powershell -ExecutionPolicy Bypass -File ./scripts/sync-apm.ps1
 
 ```text
 /
+├── registry.yml         # V字モデルの枠ごとの登録内容（各枠ベスト 1 つ）
+├── archive/non-dev/     # 退避した開発外のエージェント・スキル（配信対象外）
 ├── skills/              # Agent Skills Standard 準拠スキル (Master)
 ├── agents/              # 役割特化エージェント・ペルソナ定義 (Master)
 ├── hooks/               # 決定論的ライフサイクルフック (hooks.json 等)

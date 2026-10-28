@@ -77,89 +77,42 @@ Detailed guides, configuration procedures, and architecture specs are organized 
 
 | Document | Overview |
 | :--- | :--- |
+| [🧭 **V-Model Skeleton & Selection Criteria**](docs/v-model-skeleton.md) | Phase slots, selection criteria and the replacement rule for registering one best entry per slot. |
 | [🛡️ **Security Audit Guide**](docs/security-audit.md) | Integration specs for Cisco AI Skill Scanner, NVIDIA SkillSpector, and Built-in Linter, CLI reference, and CI/CD automated scan pipeline. |
 | [🧠 **Harness Engineering Guide**](docs/harness-engineering.md) | Autonomous environment self-diagnosis, Harness Improvement Plan (HIP) formulation, and safe automatic update cycles based on Retrospective Harness Optimization (RHO). |
 | [🚀 **Installation & Multi-Harness Deployment**](docs/usage-and-deployment.md) | Usage guide for Claude Code, multi-platform deployment via Microsoft APM (`apm.yml`), and Master layer auto-sync procedures. |
 
 ---
 
-## 🤖 Registered Agents (19 Agents)
+## 🧭 V-Model Slots (One Best per Phase)
 
-This registry includes 19 domain-specialized agents (`agents/*.md`):
+This registry registers **only one best entry per V-model phase slot** for software development. The slot definitions, selection criteria and replacement rule are in [docs/v-model-skeleton.md](docs/v-model-skeleton.md); the current assignment is in [`registry.yml`](registry.yml).
 
-### 🧠 Harness Engineering (Self-Diagnosis & Improvement)
-| Agent | Description |
-| :--- | :--- |
-| [`retrospective-harness-agent`](agents/retrospective-harness-agent.md) | Diagnostic agent that analyzes bottlenecks from past session history and error logs, formulating a Harness Improvement Plan (HIP). |
-| [`update-harness-agent`](agents/update-harness-agent.md) | Application agent that atomically and safely applies updates to Skills, Agents, Hooks, and Rules based on the HIP plan. |
+| Slot | Phase | Current entry | Status |
+| :--- | :--- | :--- | :--- |
+| V1 | Requirements | — | empty |
+| V2 | Architecture design | — | empty |
+| V3 | Detailed design | — | empty |
+| V4 | Implementation | — | empty |
+| V5 | Unit test | — | empty |
+| V6 | Integration test | — | empty |
+| V7 | System test | [`e2e-live`](skills/e2e-live/SKILL.md) | provisional |
+| V8 | Acceptance test | — | empty |
+| X1 | Code review (cross-cutting) | [`code-review`](skills/code-review/SKILL.md) (orchestrator + reviewer sub-agents) | provisional |
+| X2 | Security (cross-cutting) | [`reviewer-security`](agents/reviewer-security.md) | provisional |
 
-### 🛡️ Code Review Suite (Code Quality & Security)
-| Agent | Description |
-| :--- | :--- |
-| [`code-reviewer`](agents/code-reviewer.md) | Main agent that conducts multi-faceted code reviews covering quality, security, performance, and maintainability. |
-| [`code-review-orchestrator`](agents/code-review-orchestrator.md) | Orchestrates 4 specialized review agents in parallel to generate a deduplicated, priority-sorted integrated report. |
-| [`reviewer-security`](agents/reviewer-security.md) | Security specialist agent focusing on OWASP Top 10, vulnerabilities, input validation, and cryptography. |
-| [`reviewer-memory-safety`](agents/reviewer-memory-safety.md) | Specialist agent focusing on memory safety, resource leaks, concurrency, and thread safety. |
-| [`reviewer-style-quality`](agents/reviewer-style-quality.md) | Specialist agent focusing on clean code, naming conventions, design patterns, and readability. |
-| [`reviewer-effective`](agents/reviewer-effective.md) | Specialist agent focusing on language-specific idioms (Effective C++, C#, Java, Python, etc.). |
+*provisional* = mapped from existing assets and not yet compared against official sources.
 
-### 🏛️ Workspace & Knowledge Core (Self-Improving Workspace)
-| Agent | Description |
-| :--- | :--- |
-| [`workspace-agent`](agents/workspace-agent.md) | Autonomous operations agent for Wiki/Collection/Automation based on the "The Workspace Is the Self-Improving Agent" philosophy. |
-| [`collection-architect`](agents/collection-architect.md) | Architect agent responsible for collection schema design, data modeling, and integrity validation. |
-| [`wiki-curator`](agents/wiki-curator.md) | Curator agent responsible for knowledge base structuring, note promotion, linting, and periodic maintenance. |
+### 🧠 Registry Tooling (not a slot)
+- [`retrospective-harness`](skills/retrospective-harness/SKILL.md) / [`retrospective-harness-agent`](agents/retrospective-harness-agent.md): Self-diagnosis of agent execution history and Harness Improvement Plan (HIP) formulation.
+- [`update-harness`](skills/update-harness/SKILL.md) / [`update-harness-agent`](agents/update-harness-agent.md): Atomic, verified application of an approved HIP.
+- [`meta-skill-manager`](skills/meta-skill-manager/SKILL.md): Creating, updating and auditing Agent Skills.
 
-### 🎭 Specialized Roles & Personas
-| Agent | Description |
-| :--- | :--- |
-| [`agent-personal`](agents/agent-personal.md) | Personal companion assisting with personal productivity, task organization, and daily decision-making. |
-| [`agent-office`](agents/agent-office.md) | Office assistant supporting business document creation, meeting summary, and office workflows. |
-| [`agent-guide`](agents/agent-guide.md) | Guide agent providing system usage instructions, onboarding, and reference guides. |
-| [`agent-artist`](agents/agent-artist.md) | Creator supporting creative ideation, prompt design, and visual idea generation. |
-| [`agent-tutor`](agents/agent-tutor.md) | One-on-one tutor guiding structured curriculum design, concept explanations, and comprehension checks. |
-| [`agent-storyteller`](agents/agent-storyteller.md) | Storyteller managing world-building, character settings, and narrative writing. |
-| [`agent-accounting`](agents/agent-accounting.md) | Accounting agent assisting with invoicing, expense calculations, and bookkeeping data organization. |
-| [`agent-investor`](agents/agent-investor.md) | Investor agent assisting with portfolio analysis, market data, and financial hypothesis validation. |
+### 🗂️ Not Yet Assigned
+`archive-shipped-plans`, `make-e2e-live`, `setup-app`, `setup-ollama-local`, `string-helpers`, `explain` are development-related but not yet assigned to a slot. Each will be assigned, merged into a slot entry, or archived in the next curation PR.
 
----
-
-## 🛠️ Registered Skills (25 Skills)
-
-All skills fully comply with the **Agent Skills Standard (`skills/<slug>/SKILL.md`)**:
-
-### 🧠 Harness Engineering & Optimization (2)
-- [`retrospective-harness`](skills/retrospective-harness/SKILL.md): Self-diagnosis of agent execution history and automatic formulation of Harness Improvement Plans (HIP).
-- [`update-harness`](skills/update-harness/SKILL.md): Atomic updating and verification of Skills / Agents / Hooks based on formulated HIP.
-
-### 🏛️ Workspace & Core Primitives (8)
-- [`code-review`](skills/code-review/SKILL.md): Multi-language code review and Effective rule enforcement.
-- [`string-helpers`](skills/string-helpers/SKILL.md): String manipulation utilities such as casing, slugification, and padding.
-- [`wiki-ingest`](skills/wiki-ingest/SKILL.md): Structured ingestion of external text and web documents.
-- [`wiki-promote`](skills/wiki-promote/SKILL.md): Note promotion, key summary extraction, and index updating.
-- [`wiki-lint`](skills/wiki-lint/SKILL.md): Static verification of broken links, orphan notes, and tag consistency.
-- [`collection-builder`](skills/collection-builder/SKILL.md): Definition and validation of JSON Schema compliant collections.
-- [`meta-skill-manager`](skills/meta-skill-manager/SKILL.md): Skill metadata management, dependency checking, and registration support.
-- [`automation-scheduler`](skills/automation-scheduler/SKILL.md): Automated scheduling for cron, timer, and event-driven tasks.
-
-### 🔧 Developer Tools & Environment (7)
-- [`archive-shipped-plans`](skills/archive-shipped-plans/SKILL.md): Archiving and cleanup of completed implementation plans and documents.
-- [`e2e-live`](skills/e2e-live/SKILL.md): Execution of E2E live tests and log validation.
-- [`make-e2e-live`](skills/make-e2e-live/SKILL.md): Generation of E2E live test scenarios and fixture construction.
-- [`setup-app`](skills/setup-app/SKILL.md): Initial application setup and dependency resolution.
-- [`setup-ollama-local`](skills/setup-ollama-local/SKILL.md): Local LLM (Ollama) environment setup and model configuration.
-- [`setup-relay`](skills/setup-relay/SKILL.md): Configuration for communication relay server and MCP relay.
-- [`setup-wizard`](skills/setup-wizard/SKILL.md): Interactive onboarding wizard execution.
-
-### 💼 Domain & Productivity Presets (8)
-- [`cooking-coach`](skills/cooking-coach/SKILL.md): Recipe suggestions and step-by-step guides tailored to ingredients and nutrition.
-- [`library`](skills/library/SKILL.md): Book and literature management, reading logs, and citation metadata organization.
-- [`zenn-publisher`](skills/zenn-publisher/SKILL.md): Writing, format validation, and publishing assistance for technical articles (Zenn, etc.).
-- [`presentation-deck`](skills/presentation-deck/SKILL.md): Slide structure proposals and presentation outline generation.
-- [`storyteller`](skills/storyteller/SKILL.md): Character creation, world-building, and short scenario writing.
-- [`portfolio-tracker`](skills/portfolio-tracker/SKILL.md): Asset allocation, portfolio rebalancing, and P&L tracking.
-- [`billing-invoice`](skills/billing-invoice/SKILL.md): Qualified invoice and billing format generation from billing data.
-- [`edgar-sec-filings`](skills/edgar-sec-filings/SKILL.md): Search and retrieval of corporate filings and financial data from US SEC EDGAR.
+### 📦 Archived (non-development)
+Personal, office and domain agents/skills (accounting, investing, cooking, personal wiki/workspace, etc.) were moved to [`archive/non-dev/`](archive/non-dev/README.md). They are kept as-is but are no longer distributed.
 
 ---
 
@@ -178,6 +131,8 @@ All skills fully comply with the **Agent Skills Standard (`skills/<slug>/SKILL.m
 
 ```text
 /
+├── registry.yml         # V-model slot assignments (one best entry per slot)
+├── archive/non-dev/     # Archived non-development agents & skills (not distributed)
 ├── skills/              # Agent Skills Standard compliant skills (Master)
 ├── agents/              # Domain-specialized agents and persona definitions (Master)
 ├── hooks/               # Deterministic lifecycle hooks (hooks.json, etc.)

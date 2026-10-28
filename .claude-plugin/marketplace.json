@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "agent-registry-bundle",
-      "description": "Comprehensive bundle containing Harness Engineering, code-reviewer agent suite, Agent Skills, and workspace/wiki/domain primitives.",
+      "description": "Curated software-development bundle: one best agent/skill per V-model phase slot, plus Harness Engineering and Code Review suites.",
       "version": "1.2.0",
       "source": {
         "source": "local",
