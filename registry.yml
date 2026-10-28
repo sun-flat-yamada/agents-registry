@@ -1,0 +1,150 @@
+# ==============================================================================
+# V-Model Slot Registry (Source of Truth for "what is registered and why")
+# ------------------------------------------------------------------------------
+# 1 slot = 1 best entry. See docs/v-model-skeleton.md for the slot definitions,
+# selection criteria and the replacement rule.
+#
+#   selected:   the single entry currently registered for the slot (null = empty)
+#               An "entry" is one entry point (skill / agent / command). It may
+#               bundle sub-components (e.g. a review orchestrator + sub-agents).
+#   candidates: items under evaluation for the slot (not yet selected)
+#   status:     empty | provisional | selected
+#               provisional = mapped from existing assets, not yet compared
+#               against official sources (resolved in the next curation PR)
+# ==============================================================================
+
+version: 1
+last_reviewed: 2026-10-28
+
+slots:
+  # ---------------------------------------------------------------- left side --
+  - id: V1-requirements
+    phase: 要求定義
+    pairs_with: V8-acceptance-test
+    goal: 曖昧な要望を、検証可能な要求（受入基準つき）に落とす
+    status: empty
+    selected: null
+    candidates: []
+
+  - id: V2-architecture
+    phase: 基本設計（アーキテクチャ設計）
+    pairs_with: V7-system-test
+    goal: システム構成・境界・主要な技術判断を決め、記録（ADR 等）に残す
+    status: empty
+    selected: null
+    candidates:
+      - path: chatmodes/architect.md
+
+  - id: V3-detailed-design
+    phase: 詳細設計
+    pairs_with: V6-integration-test
+    goal: モジュール単位のインターフェース・データ構造・処理手順を実装可能な粒度で設計する
+    status: empty
+    selected: null
+    candidates: []
+
+  # ------------------------------------------------------------------ bottom --
+  - id: V4-implementation
+    phase: 実装
+    pairs_with: V5-unit-test
+    goal: 設計に沿って、小さく検証しながらコードを書く
+    status: empty
+    selected: null
+    candidates:
+      - path: instructions/typescript-rules.md
+      - path: skills/string-helpers
+
+  # --------------------------------------------------------------- right side --
+  - id: V5-unit-test
+    phase: 単体テスト
+    pairs_with: V4-implementation
+    goal: 関数・クラス単位の振る舞いをテストで固定する（TDD を含む）
+    status: empty
+    selected: null
+    candidates: []
+
+  - id: V6-integration-test
+    phase: 結合テスト
+    pairs_with: V3-detailed-design
+    goal: モジュール間・外部依存との接続をテストで検証する
+    status: empty
+    selected: null
+    candidates: []
+
+  - id: V7-system-test
+    phase: システムテスト
+    pairs_with: V2-architecture
+    goal: 実際に動くシステムを E2E で検証する
+    status: provisional
+    selected:
+      path: skills/e2e-live
+      source: in-house
+      reason: 既存資産からの暫定割当。公式ソースとの比較は未実施
+    candidates:
+      - path: skills/make-e2e-live
+
+  - id: V8-acceptance-test
+    phase: 受入テスト
+    pairs_with: V1-requirements
+    goal: V1 の受入基準に対して完成物を確認し、合否と根拠を残す
+    status: empty
+    selected: null
+    candidates: []
+
+  # ------------------------------------------------------------ cross-cutting --
+  - id: X1-code-review
+    phase: 横断：コードレビュー
+    pairs_with: null
+    goal: 変更差分の正しさ・品質を、マージ前に確認する
+    status: provisional
+    selected:
+      path: skills/code-review
+      source: in-house
+      components:
+        - agents/code-review-orchestrator.md
+        - agents/code-reviewer.md
+        - agents/reviewer-effective.md
+        - agents/reviewer-memory-safety.md
+        - agents/reviewer-style-quality.md
+        - commands/code-review-subagent.md
+      reason: 既存資産からの暫定割当。公式ソースとの比較は未実施
+    candidates: []
+
+  - id: X2-security
+    phase: 横断：セキュリティ
+    pairs_with: null
+    goal: 設計・実装・依存関係の脆弱性を検出し、対処方針を示す
+    status: provisional
+    selected:
+      path: agents/reviewer-security.md
+      source: in-house
+      reason: 既存資産からの暫定割当。公式ソースとの比較は未実施
+    candidates: []
+
+# ------------------------------------------------------------------------------
+# Not a V-model slot: tooling that maintains this registry itself.
+# Kept, but never counted as a slot entry.
+# ------------------------------------------------------------------------------
+registry_tooling:
+  - skills/retrospective-harness
+  - skills/update-harness
+  - skills/meta-skill-manager
+  - agents/retrospective-harness-agent.md
+  - agents/update-harness-agent.md
+  - commands/retrospective-harness.md
+  - commands/update-harness.md
+
+# ------------------------------------------------------------------------------
+# Development-related assets not yet assigned to a slot.
+# Each is either assigned, merged into a slot entry, or archived in the next
+# curation PR.
+# ------------------------------------------------------------------------------
+unassigned:
+  - skills/archive-shipped-plans
+  - skills/setup-app
+  - skills/setup-ollama-local
+  - commands/explain.md
+  - contexts/project-structure.md
+
+# Non-development assets are kept in archive/non-dev/ (not distributed).
+archive: archive/non-dev/

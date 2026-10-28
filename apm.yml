@@ -1,6 +1,6 @@
 name: agent-registry-bundle
 version: 1.2.0
-description: Comprehensive Agent & Skills Registry supporting Claude Plugin and APM standards. Features Harness Engineering, Code Reviewers, and full suite of Workspace/Wiki/Domain primitives.
+description: "Curated software-development Agent & Skills Registry: one best agent/skill per V-model phase slot (see registry.yml). Supports Claude Plugin and APM standards."
 author: sun_flat
 
 # Canonical multi-harness deployment targets supported by APM
@@ -16,12 +16,7 @@ primitives:
   skills:
     - skills/code-review
     - skills/string-helpers
-    - skills/wiki-ingest
-    - skills/wiki-promote
-    - skills/wiki-lint
-    - skills/collection-builder
     - skills/meta-skill-manager
-    - skills/automation-scheduler
     - skills/retrospective-harness
     - skills/update-harness
     - skills/archive-shipped-plans
@@ -29,16 +24,6 @@ primitives:
     - skills/make-e2e-live
     - skills/setup-app
     - skills/setup-ollama-local
-    - skills/setup-relay
-    - skills/setup-wizard
-    - skills/cooking-coach
-    - skills/library
-    - skills/zenn-publisher
-    - skills/presentation-deck
-    - skills/storyteller
-    - skills/portfolio-tracker
-    - skills/billing-invoice
-    - skills/edgar-sec-filings
   agents:
     - agents/code-reviewer.md
     - agents/code-review-orchestrator.md
@@ -46,19 +31,8 @@ primitives:
     - agents/reviewer-memory-safety.md
     - agents/reviewer-security.md
     - agents/reviewer-style-quality.md
-    - agents/workspace-agent.md
-    - agents/collection-architect.md
-    - agents/wiki-curator.md
     - agents/retrospective-harness-agent.md
     - agents/update-harness-agent.md
-    - agents/agent-personal.md
-    - agents/agent-office.md
-    - agents/agent-guide.md
-    - agents/agent-artist.md
-    - agents/agent-tutor.md
-    - agents/agent-storyteller.md
-    - agents/agent-accounting.md
-    - agents/agent-investor.md
   prompts:
     - commands/explain.md
     - commands/code-review-subagent.md
