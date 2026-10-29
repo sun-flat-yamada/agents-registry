@@ -71,3 +71,13 @@
 | `empty` | まだ何も登録されていない |
 | `provisional` | 既存資産から暫定的に割り当てたもの。公式ソースとの比較は未実施 |
 | `selected` | 選定基準に沿って比較し、ベストとして選んだもの |
+
+---
+
+## 4. 月次レビュー
+
+毎月 1 回、定期タスクが新しいセッションで [`registry-monthly-review`](../.claude/skills/registry-monthly-review/SKILL.md) スキルを実行します。
+
+1. [`scripts/check-upstream.py`](../scripts/check-upstream.py) が、`registry.yml` の `upstream_sources`（Anthropic 公式リポジトリと参照用リポジトリ）について、前回レビューした commit 以降の変更を構成要素ごとに集計します。あわせて、取り込んだファイル（`vendored`）が上流と一致しているかを確認します。
+2. 変更点を枠ごとに選定基準で評価し、改善が見込めるものだけを変更します。
+3. 変更があればドラフト PR を作り、マージは人間が判断します。改善点がなければ PR は作りません。

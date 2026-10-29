@@ -222,3 +222,59 @@ registry_tooling:
 archive:
   - archive/non-dev/       # not software development
   - archive/dev-retired/   # development-related, replaced by a slot entry or outside every slot
+
+# ------------------------------------------------------------------------------
+# Monthly review inputs (read by scripts/check-upstream.py)
+# ------------------------------------------------------------------------------
+# upstream_sources: repositories scanned every month. `reviewed_commit` is the
+#   commit the last review looked at; the next review reports what changed
+#   under `watch` since then and moves it forward in its PR.
+# vendored: files copied verbatim from upstream. The check compares each local
+#   file with the upstream file at HEAD.
+upstream_sources:
+  - repo: anthropics/claude-plugins-official
+    role: primary
+    watch: [plugins/]
+    reviewed_commit: f8c5e7a1dcb71b10cb74586224b5401f3de5db28
+  - repo: anthropics/skills
+    role: primary
+    watch: [skills/]
+    reviewed_commit: ca45fc496a3436251f191354091d557da31c15b5
+  - repo: anthropics/claude-code
+    role: primary
+    watch: [CHANGELOG.md]
+    reviewed_commit: null
+  - repo: worldflowai/everything-claude-code
+    role: ideas-only
+    watch: [agents/, skills/, commands/, rules/]
+    reviewed_commit: null
+
+vendored:
+  - local: commands/code-review.md
+    repo: anthropics/claude-plugins-official
+    path: plugins/code-review/commands/code-review.md
+    commit: f8c5e7a1dcb71b10cb74586224b5401f3de5db28
+  - local: agents/code-explorer.agent.md
+    repo: anthropics/claude-plugins-official
+    path: plugins/feature-dev/agents/code-explorer.md
+    commit: f8c5e7a1dcb71b10cb74586224b5401f3de5db28
+  - local: agents/code-architect.agent.md
+    repo: anthropics/claude-plugins-official
+    path: plugins/feature-dev/agents/code-architect.md
+    commit: f8c5e7a1dcb71b10cb74586224b5401f3de5db28
+  - local: agents/type-design-analyzer.agent.md
+    repo: anthropics/claude-plugins-official
+    path: plugins/pr-review-toolkit/agents/type-design-analyzer.md
+    commit: f8c5e7a1dcb71b10cb74586224b5401f3de5db28
+  - local: agents/pr-test-analyzer.agent.md
+    repo: anthropics/claude-plugins-official
+    path: plugins/pr-review-toolkit/agents/pr-test-analyzer.md
+    commit: f8c5e7a1dcb71b10cb74586224b5401f3de5db28
+  - local: agents/code-simplifier.agent.md
+    repo: anthropics/claude-plugins-official
+    path: plugins/code-simplifier/agents/code-simplifier.md
+    commit: f8c5e7a1dcb71b10cb74586224b5401f3de5db28
+  - local: skills/webapp-testing/
+    repo: anthropics/skills
+    path: skills/webapp-testing/
+    commit: ca45fc496a3436251f191354091d557da31c15b5
