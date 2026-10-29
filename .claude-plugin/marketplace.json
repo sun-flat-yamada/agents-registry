@@ -1,19 +1,16 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace-manifest.json",
   "name": "agent-registry-marketplace",
-  "description": "Enterprise Agent & Skills Registry Marketplace. Distributes Harness Engineering tools, specialized agent personas, and Agent Skills Standard modules.",
+  "description": "Curated software-development Agent & Skills Registry for Claude Code and GitHub Copilot CLI.",
   "owner": {
     "name": "sun_flat"
   },
   "plugins": [
     {
       "name": "agent-registry-bundle",
-      "description": "Curated software-development bundle: one best agent/skill per V-model phase slot, plus Harness Engineering and Code Review suites.",
+      "description": "One best agent/skill per V-model phase slot (requirements to acceptance test, plus code review), for Claude Code and GitHub Copilot CLI.",
       "version": "1.2.0",
-      "source": {
-        "source": "local",
-        "path": "./"
-      }
+      "source": "./"
     }
   ]
 }

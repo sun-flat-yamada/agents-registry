@@ -38,7 +38,7 @@ function Sync-DirectoryStructure {
     $files = Get-ChildItem -Path $SourceDir -Filter $FileFilter -File
     foreach ($file in $files) {
         $targetName = if ($TargetExtension) {
-            [System.IO.Path]::ChangeExtension($file.Name, $TargetExtension)
+            if ($file.Name.EndsWith($TargetExtension)) { $file.Name } else { [System.IO.Path]::ChangeExtension($file.Name, $TargetExtension) }
         } else {
             $file.Name
         }

@@ -50,7 +50,7 @@ powershell -ExecutionPolicy Bypass -File ./scripts/audit-security.ps1 -ChangedOn
 
 # 3. 特定のスキルまたはエージェントを個別スキャン
 powershell -ExecutionPolicy Bypass -File ./scripts/audit-security.ps1 -Target skills/automation-scheduler/
-powershell -ExecutionPolicy Bypass -File ./scripts/audit-security.ps1 -Target agents/reviewer-security.md
+powershell -ExecutionPolicy Bypass -File ./scripts/audit-security.ps1 -Target agents/code-explorer.agent.md
 
 # 4. レポートファイル (JSON, Markdown, SARIF) を出力
 powershell -ExecutionPolicy Bypass -File ./scripts/audit-security.ps1 `

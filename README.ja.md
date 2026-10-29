@@ -3,14 +3,14 @@
 [English](README.md) | [日本語](README.ja.md)
 
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin%20Ready-blueviolet.svg)](https://docs.claude.com)
-[![Agent Package Manager](https://img.shields.io/badge/Microsoft%20APM-Multi--Harness-blue.svg)](https://github.com/microsoft/apm)
+[![GitHub Copilot CLI](https://img.shields.io/badge/GitHub%20Copilot%20CLI-Supported-blue.svg)](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-marketplace)
 [![Agent Skills Standard](https://img.shields.io/badge/Agent%20Skills-Standard%20Compliant-brightgreen.svg)](https://github.com)
 [![Security Audited](https://img.shields.io/badge/Security-Cisco%20%26%20NVIDIA%20Audited-success.svg)](docs/security-audit.md)
 [![Harness Engineering](https://img.shields.io/badge/Harness%20Engineering-RHO%20Enabled-orange.svg)](docs/harness-engineering.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/sun.flat.yamada)
 
-本リポジトリは、AI エージェントおよびスキルのパッケージングにおけるデファクトスタンダード（**Claude Code Plugin 形式 & Agent Skills Standard**）を Master (Source of Truth) として採用し、**Microsoft APM (Agent Package Manager)** によるマルチハーネス配信（Claude Code, Cursor, Copilot, Gemini）を完全サポートするハイブリッド構成の Agent Registry / Template です。
+本リポジトリは、ソフトウェア開発向けに厳選した Agent / Skills レジストリです。**V字モデルの工程ごとにベストを 1 つ**だけ登録し、より良い手法が出てきたら更新します。**Claude Code Plugin 形式 & Agent Skills Standard** を Master (Source of Truth) とし、**Claude Code** をメインに、同じプラグインを **GitHub Copilot CLI** にも導入できます。
 
 最先端の **Harness Engineering (RHO)** による自律的自己診断・更新サイクル、および **Cisco & NVIDIA ツールによる強固なセキュリティ監査 CI/CD** を標準装備しています。
 
@@ -21,25 +21,24 @@
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                       Master (Source of Truth)                              │
-│            Claude Code Plugin (.claude-plugin/plugin.json)                  │
-│                     Agent Skills Standard (skills/*/SKILL.md)               │
+│   .claude-plugin/plugin.json · skills/*/SKILL.md · agents/*.agent.md        │
+│   commands/*.md · registry.yml (one best entry per V-model slot)            │
 └──────────────────────┬───────────────────────────────┬──────────────────────┘
                        │                               │
                        ▼                               ▼
        ┌───────────────────────────────┐ ┌───────────────────────────────┐
-       │     Claude Code Ecosystem     │ │     Microsoft APM Deploy      │
-       │  • /plugin install            │ │  • targets: claude, cursor,   │
-       │  • /retrospective-harness     │ │    copilot, gemini            │
-       │  • /update-harness            │ │  • scripts/sync-apm.ps1       │
+       │      Claude Code (main)       │ │      GitHub Copilot CLI       │
+       │  /plugin marketplace add      │ │  copilot plugin marketplace   │
+       │  /plugin install              │ │  copilot plugin install       │
+       │  (reads .claude-plugin/)      │ │  (reads .claude-plugin/ too)  │
        └───────────────────────────────┘ └───────────────────────────────┘
                        │                               │
                        └───────────────┬───────────────┘
-                                       │
                                        ▼
        ┌───────────────────────────────────────────────────────────────┐
        │         Automated Security Auditing & CI/CD Pipeline          │
        │    • Cisco AI Skill Scanner + NVIDIA SkillSpector + Linter    │
-       │    • Automatic incremental scan on skill/agent additions      │
+       │    • Copilot CLI plugin load check                            │
        │    • SARIF 2.1.0 output to GitHub Code Scanning               │
        └───────────────────────────────────────────────────────────────┘
 ```
@@ -48,10 +47,23 @@
 
 ## ⚡ クイックスタート
 
-### 1. Claude Code プラグインとして利用
+### 1. インストール
+
+どちらのクライアントも、このリポジトリの同じ `.claude-plugin/` マニフェストを読み込みます。
+
+**Claude Code**
 ```bash
-/plugin install github:sun-flat-yamada/agents-registry
+/plugin marketplace add sun-flat-yamada/agents-registry
+/plugin install agent-registry-bundle@agent-registry-marketplace
 ```
+
+**GitHub Copilot CLI**
+```bash
+copilot plugin marketplace add sun-flat-yamada/agents-registry
+copilot plugin install agent-registry-bundle@agent-registry-marketplace
+```
+
+X2（セキュリティ）枠の `claude-security` は Anthropic 公式プラグインで、Claude Code でのみ動きます：`/plugin install claude-security@claude-plugins-official`。クライアントごとに使える範囲は [docs/usage-and-deployment.md](docs/usage-and-deployment.md) を参照してください。
 
 ### 2. セキュリティ監査の実行 (ローカル)
 新規スキルやエージェントの作成・修正時に脆弱性やプロンプトインジェクションを検査します：
@@ -104,8 +116,8 @@ powershell -ExecutionPolicy Bypass -File ./scripts/sync-apm.ps1
 工程間は ID でつながります。要求 `REQ-n`・受入基準 `AC-n`（V1 → V8）、システムテスト観点 `ST-n`（V2 → V7）、インターフェース `IF-n`・結合テスト観点 `IT-n`（V3 → V6）です。「内部で使うもの」のエージェントと `webapp-testing` は Anthropic 公式リポジトリから無改変で取り込んでいます（[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)）。
 
 ### 🧠 レジストリ運用ツール（枠外）
-- [`retrospective-harness`](skills/retrospective-harness/SKILL.md) / [`retrospective-harness-agent`](agents/retrospective-harness-agent.md): エージェント実行履歴の自己診断と Harness Improvement Plan (HIP) の策定。
-- [`update-harness`](skills/update-harness/SKILL.md) / [`update-harness-agent`](agents/update-harness-agent.md): 承認済み HIP のアトミックな適用と検証。
+- [`retrospective-harness`](skills/retrospective-harness/SKILL.md) / [`retrospective-harness-agent`](agents/retrospective-harness-agent.agent.md): エージェント実行履歴の自己診断と Harness Improvement Plan (HIP) の策定。
+- [`update-harness`](skills/update-harness/SKILL.md) / [`update-harness-agent`](agents/update-harness-agent.agent.md): 承認済み HIP のアトミックな適用と検証。
 - [`meta-skill-manager`](skills/meta-skill-manager/SKILL.md): Agent Skills の作成・更新・監査。
 
 ### 📦 退避済み
@@ -135,7 +147,6 @@ powershell -ExecutionPolicy Bypass -File ./scripts/sync-apm.ps1
 ├── licenses/            # 取り込んだ公式ファイルのライセンス（THIRD_PARTY_NOTICES.md 参照）
 ├── skills/              # Agent Skills Standard 準拠スキル (Master)
 ├── agents/              # 役割特化エージェント・ペルソナ定義 (Master)
-├── hooks/               # 決定論的ライフサイクルフック (hooks.json 等)
 ├── commands/            # スラッシュコマンド・再利用可能プロンプト
 ├── scripts/             # セキュリティ監査 & APM 同期スクリプト
 ├── docs/                # 詳細カテゴリ別技術ドキュメント

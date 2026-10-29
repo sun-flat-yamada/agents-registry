@@ -7,8 +7,6 @@ author: sun_flat
 targets:
   - claude
   - copilot
-  - cursor
-  - gemini
   - agent-skills
 
 # Primitive definitions and source-of-truth mappings
@@ -27,30 +25,20 @@ primitives:
     - skills/update-harness
     - skills/meta-skill-manager
   agents:
-    - agents/code-explorer.md
-    - agents/code-architect.md
-    - agents/type-design-analyzer.md
-    - agents/code-simplifier.md
-    - agents/pr-test-analyzer.md
-    - agents/retrospective-harness-agent.md
-    - agents/update-harness-agent.md
+    - agents/code-explorer.agent.md
+    - agents/code-architect.agent.md
+    - agents/type-design-analyzer.agent.md
+    - agents/code-simplifier.agent.md
+    - agents/pr-test-analyzer.agent.md
+    - agents/retrospective-harness-agent.agent.md
+    - agents/update-harness-agent.agent.md
   prompts:
     - commands/code-review.md
     - commands/retrospective-harness.md
     - commands/update-harness.md
-  hooks:
-    - hooks/hooks.json
 
 dependencies:
   apm: []
-
-mcp:
-  - name: filesystem
-    command: npx
-    args: ["-y", "@modelcontextprotocol/server-filesystem", "."]
-  - name: memory
-    command: npx
-    args: ["-y", "@modelcontextprotocol/server-memory"]
 
 scripts:
   sync: powershell.exe -ExecutionPolicy Bypass -File ./scripts/sync-apm.ps1
