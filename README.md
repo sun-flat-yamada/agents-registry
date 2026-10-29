@@ -3,14 +3,14 @@
 [English](README.md) | [日本語](README.ja.md)
 
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin%20Ready-blueviolet.svg)](https://docs.claude.com)
-[![Agent Package Manager](https://img.shields.io/badge/Microsoft%20APM-Multi--Harness-blue.svg)](https://github.com/microsoft/apm)
+[![GitHub Copilot CLI](https://img.shields.io/badge/GitHub%20Copilot%20CLI-Supported-blue.svg)](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-marketplace)
 [![Agent Skills Standard](https://img.shields.io/badge/Agent%20Skills-Standard%20Compliant-brightgreen.svg)](https://github.com)
 [![Security Audited](https://img.shields.io/badge/Security-Cisco%20%26%20NVIDIA%20Audited-success.svg)](docs/security-audit.md)
 [![Harness Engineering](https://img.shields.io/badge/Harness%20Engineering-RHO%20Enabled-orange.svg)](docs/harness-engineering.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/sun.flat.yamada)
 
-This repository is a hybrid Agent Registry / Template that adopts de facto standards (**Claude Code Plugin format & Agent Skills Standard**) as the Master (Source of Truth), while fully supporting multi-harness distribution (Claude Code, Cursor, Copilot, Gemini) via **Microsoft APM (Agent Package Manager)**.
+This repository is a curated Agent & Skills Registry for software development. It registers **one best agent or skill for each phase of the V-model** and refreshes it as better approaches appear. The **Claude Code Plugin format & Agent Skills Standard** is the Master (Source of Truth); **Claude Code** is the main client, and the same plugin also installs in **GitHub Copilot CLI**.
 
 It comes equipped out-of-the-box with autonomous self-diagnosis and update cycles powered by cutting-edge **Harness Engineering (RHO)**, as well as a **robust security audit CI/CD pipeline leveraging Cisco & NVIDIA tools**.
 
@@ -21,25 +21,24 @@ It comes equipped out-of-the-box with autonomous self-diagnosis and update cycle
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                       Master (Source of Truth)                              │
-│            Claude Code Plugin (.claude-plugin/plugin.json)                  │
-│                     Agent Skills Standard (skills/*/SKILL.md)               │
+│   .claude-plugin/plugin.json · skills/*/SKILL.md · agents/*.agent.md        │
+│   commands/*.md · registry.yml (one best entry per V-model slot)            │
 └──────────────────────┬───────────────────────────────┬──────────────────────┘
                        │                               │
                        ▼                               ▼
        ┌───────────────────────────────┐ ┌───────────────────────────────┐
-       │     Claude Code Ecosystem     │ │     Microsoft APM Deploy      │
-       │  • /plugin install            │ │  • targets: claude, cursor,   │
-       │  • /retrospective-harness     │ │    copilot, gemini            │
-       │  • /update-harness            │ │  • scripts/sync-apm.ps1       │
+       │      Claude Code (main)       │ │      GitHub Copilot CLI       │
+       │  /plugin marketplace add      │ │  copilot plugin marketplace   │
+       │  /plugin install              │ │  copilot plugin install       │
+       │  (reads .claude-plugin/)      │ │  (reads .claude-plugin/ too)  │
        └───────────────────────────────┘ └───────────────────────────────┘
                        │                               │
                        └───────────────┬───────────────┘
-                                       │
                                        ▼
        ┌───────────────────────────────────────────────────────────────┐
        │         Automated Security Auditing & CI/CD Pipeline          │
        │    • Cisco AI Skill Scanner + NVIDIA SkillSpector + Linter    │
-       │    • Automatic incremental scan on skill/agent additions      │
+       │    • Copilot CLI plugin load check                            │
        │    • SARIF 2.1.0 output to GitHub Code Scanning               │
        └───────────────────────────────────────────────────────────────┘
 ```
@@ -48,10 +47,23 @@ It comes equipped out-of-the-box with autonomous self-diagnosis and update cycle
 
 ## ⚡ Quickstart
 
-### 1. Use as a Claude Code Plugin
+### 1. Install
+
+Both clients read the same `.claude-plugin/` manifests from this repository.
+
+**Claude Code**
 ```bash
-/plugin install github:sun-flat-yamada/agents-registry
+/plugin marketplace add sun-flat-yamada/agents-registry
+/plugin install agent-registry-bundle@agent-registry-marketplace
 ```
+
+**GitHub Copilot CLI**
+```bash
+copilot plugin marketplace add sun-flat-yamada/agents-registry
+copilot plugin install agent-registry-bundle@agent-registry-marketplace
+```
+
+The X2 security slot uses Anthropic's `claude-security` plugin, which runs only in Claude Code: `/plugin install claude-security@claude-plugins-official`. See [docs/usage-and-deployment.md](docs/usage-and-deployment.md) for what works in each client.
 
 ### 2. Run Security Audit (Locally)
 Inspect new or updated skills and agents for vulnerabilities and prompt injection:
@@ -78,6 +90,7 @@ Detailed guides, configuration procedures, and architecture specs are organized 
 | Document | Overview |
 | :--- | :--- |
 | [🧭 **V-Model Skeleton & Selection Criteria**](docs/v-model-skeleton.md) | Phase slots, selection criteria and the replacement rule for registering one best entry per slot. |
+| [🗓️ **Monthly Review**](docs/v-model-skeleton.md#4-月次レビュー) | Once a month a scheduled task checks Anthropic's official repositories for changes and opens a draft PR when a slot can be improved. Merges are always decided by a human. |
 | [🛡️ **Security Audit Guide**](docs/security-audit.md) | Integration specs for Cisco AI Skill Scanner, NVIDIA SkillSpector, and Built-in Linter, CLI reference, and CI/CD automated scan pipeline. |
 | [🧠 **Harness Engineering Guide**](docs/harness-engineering.md) | Autonomous environment self-diagnosis, Harness Improvement Plan (HIP) formulation, and safe automatic update cycles based on Retrospective Harness Optimization (RHO). |
 | [🚀 **Installation & Multi-Harness Deployment**](docs/usage-and-deployment.md) | Usage guide for Claude Code, multi-platform deployment via Microsoft APM (`apm.yml`), and Master layer auto-sync procedures. |
@@ -104,8 +117,8 @@ This registry registers **only one best entry per V-model phase slot** for softw
 The phases hand off through traceable IDs: requirements `REQ-n` / acceptance criteria `AC-n` (V1 → V8), system-test viewpoints `ST-n` (V2 → V7), and interfaces `IF-n` / integration-test points `IT-n` (V3 → V6). The agents in the *Uses* column (`code-explorer`, `code-architect`, `type-design-analyzer`, `code-simplifier`, `pr-test-analyzer`) and `webapp-testing` are copied verbatim from Anthropic's official repositories; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ### 🧠 Registry Tooling (not a slot)
-- [`retrospective-harness`](skills/retrospective-harness/SKILL.md) / [`retrospective-harness-agent`](agents/retrospective-harness-agent.md): Self-diagnosis of agent execution history and Harness Improvement Plan (HIP) formulation.
-- [`update-harness`](skills/update-harness/SKILL.md) / [`update-harness-agent`](agents/update-harness-agent.md): Atomic, verified application of an approved HIP.
+- [`retrospective-harness`](skills/retrospective-harness/SKILL.md) / [`retrospective-harness-agent`](agents/retrospective-harness-agent.agent.md): Self-diagnosis of agent execution history and Harness Improvement Plan (HIP) formulation.
+- [`update-harness`](skills/update-harness/SKILL.md) / [`update-harness-agent`](agents/update-harness-agent.agent.md): Atomic, verified application of an approved HIP.
 - [`meta-skill-manager`](skills/meta-skill-manager/SKILL.md): Creating, updating and auditing Agent Skills.
 
 ### 📦 Archived
@@ -135,7 +148,6 @@ Archived items are kept as-is but are no longer distributed.
 ├── licenses/            # Upstream licenses for vendored files (see THIRD_PARTY_NOTICES.md)
 ├── skills/              # Agent Skills Standard compliant skills (Master)
 ├── agents/              # Domain-specialized agents and persona definitions (Master)
-├── hooks/               # Deterministic lifecycle hooks (hooks.json, etc.)
 ├── commands/            # Slash commands and reusable prompt instructions
 ├── scripts/             # Security auditing & APM synchronization scripts
 ├── docs/                # Detailed technical documentation by category

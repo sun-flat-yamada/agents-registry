@@ -20,3 +20,10 @@
 | `skills/archive-shipped-plans` | 特定の `plans/` 運用を前提にした後片付け | なし（枠外） |
 | `skills/setup-app`, `skills/setup-ollama-local` | 特定アプリ・ローカル LLM の環境構築で、工程に対応しない | なし（枠外） |
 | `skills/string-helpers` | 文字列処理の小さなユーティリティで、工程に対応しない | なし（枠外） |
+
+## 退避したもの（2026-10-29）
+
+| 元の場所 | 理由 | 置き換え先 |
+| :--- | :--- | :--- |
+| `hooks/hooks.json`, `hooks/pre-commit.ps1`, `hooks/pre-commit.sh` | プラグイン利用者のすべての Bash 実行の前に `npm run lint` / `npm run format` を走らせ、利用者の環境に常に影響するため | なし |
+| `.mcp.json`（`mcp.json` として保存） | Filesystem / Memory の MCP サーバーを利用者の環境に常に追加するが、どの枠にも対応しないため | なし |
