@@ -47,7 +47,7 @@ slots:
       path: skills/architecture-design
       source: in-house
       components:
-        - agents/code-explorer.md
+        - agents/code-explorer.agent.md
       reason: >-
         公式 feature-dev の「code-explorer を並列で走らせて既存コードを把握し、
         2〜3 案を比較して推奨し、ユーザーに選ばせる」流れを中心に据え、
@@ -66,8 +66,8 @@ slots:
       path: skills/detailed-design
       source: in-house
       components:
-        - agents/code-architect.md
-        - agents/type-design-analyzer.md
+        - agents/code-architect.agent.md
+        - agents/type-design-analyzer.agent.md
       reason: >-
         公式 code-architect の実装ブループリント（ファイル・コンポーネント・データフロー・
         ビルド順序）に、IF-n の契約記述と IT-n（V6 への受け渡し）、公式
@@ -84,7 +84,7 @@ slots:
       path: skills/implementation-loop
       source: in-house
       components:
-        - agents/code-simplifier.md
+        - agents/code-simplifier.agent.md
       reason: >-
         ビルド順序ごとに「テスト先行 → 最小実装 → プロジェクト自身のビルド・型・lint・
         テストで検証」を回し、最後に公式 code-simplifier で振る舞いを変えずに整える。
@@ -105,7 +105,7 @@ slots:
       path: skills/unit-test-tdd
       source: in-house
       components:
-        - agents/pr-test-analyzer.md
+        - agents/pr-test-analyzer.agent.md
       reason: >-
         公式に TDD 専用のものはない。everything-claude-code の tdd-guide の
         Red-Green-Refactor は今も有効なので取り込み、カバレッジ 80% の数値目標は
@@ -194,11 +194,13 @@ slots:
         commit: f8c5e7a1dcb71b10cb74586224b5401f3de5db28
         license: Apache-2.0
       install: /plugin install claude-security@claude-plugins-official
+      clients: [claude-code]
       reason: >-
         脅威モデル作成・探索・全指摘の独立検証・パッチ提案まで行い、SARIF も出せる。
         スクリプトとワークフローを含む大きなプラグインで、取り込むと追従が難しいため
         公式マーケットプレイスから入れる形にした。旧 reviewer-security（21 行の
-        チェックリスト型）は退避。GitHub Copilot CLI での扱いはステップ3で検討。
+        チェックリスト型）は退避。Claude Code のワークフロー機能を使うため
+        GitHub Copilot CLI では動かない（Claude Code で実行する）。
     candidates:
       - path: anthropics/claude-plugins-official plugins/security-guidance
         note: 編集時のフックで警告する常駐型。X2 の入口とは役割が違うため候補に留める
@@ -211,8 +213,8 @@ registry_tooling:
   - skills/retrospective-harness
   - skills/update-harness
   - skills/meta-skill-manager
-  - agents/retrospective-harness-agent.md
-  - agents/update-harness-agent.md
+  - agents/retrospective-harness-agent.agent.md
+  - agents/update-harness-agent.agent.md
   - commands/retrospective-harness.md
   - commands/update-harness.md
 

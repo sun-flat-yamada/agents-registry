@@ -18,7 +18,7 @@ jobs:
         run: |
           python3 -c "
           import json, glob, sys
-          json_files = ['.claude-plugin/plugin.json', '.claude-plugin/marketplace.json', '.mcp.json', 'hooks/hooks.json']
+          json_files = ['.claude-plugin/plugin.json', '.claude-plugin/marketplace.json']
           for f in json_files:
               try:
                   with open(f, 'r', encoding='utf-8') as fp:
@@ -42,3 +42,42 @@ jobs:
       - name: Run Fast Built-in Security Audit
         run: |
           python3 ./scripts/security-audit.py --scanners builtin --fail-on high
+
+  copilot-cli-compat:
+    name: GitHub Copilot CLI Plugin Load Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install GitHub Copilot CLI
+        run: npm install -g @github/copilot
+
+      - name: Install the plugin from this repository's marketplace
+        run: |
+          copilot plugin marketplace add "$GITHUB_WORKSPACE"
+          copilot plugin install agent-registry-bundle@agent-registry-marketplace
+
+      - name: Verify every declared skill is loaded
+        run: |
+          copilot skill list > skills.txt
+          python3 - <<'PY'
+          import json, re, sys
+          listed = open("skills.txt", encoding="utf-8").read()
+          plugin = json.load(open(".claude-plugin/plugin.json", encoding="utf-8"))
+          missing = []
+          for path in plugin["skills"]:
+              text = open(path.rstrip("/") + "/SKILL.md", encoding="utf-8").read()
+              name = re.search(r"^name:\s*(\S+)", text, re.M).group(1)
+              if not re.search(rf"^\s*(?:[\w.-]+:)?{re.escape(name)} - ", listed, re.M):
+                  missing.append(name)
+          if missing:
+              print("Skills not loaded by Copilot CLI:", ", ".join(missing))
+              sys.exit(1)
+          print(f"All {len(plugin['skills'])} skills are loaded by Copilot CLI.")
+          PY

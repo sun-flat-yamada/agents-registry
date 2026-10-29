@@ -36,6 +36,7 @@ sync_files() {
         [ -e "$file" ] || continue
         local base
         base="$(basename "$file" .md)"
+        base="${base%"$suffix"}"
         local dest="$target_dir/${base}${suffix}.md"
 
         if [ "$VERIFY_ONLY" -eq 1 ]; then

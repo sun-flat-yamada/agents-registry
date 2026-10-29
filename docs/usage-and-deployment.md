@@ -1,90 +1,85 @@
-# 🚀 インストールとマルチハーネス配信ガイド (Usage & Deployment Guide)
+# 🚀 インストールと利用ガイド (Usage & Deployment Guide)
 
-本リポジトリは、**Claude Code Plugin 形式および Agent Skills Standard を Master (Source of Truth)** としながら、**Microsoft APM (Agent Package Manager)** を通じたマルチハーネス配信（Claude Code, Cursor, GitHub Copilot, Google Gemini）を完全サポートしています。
+本リポジトリは **Claude Code Plugin 形式と Agent Skills Standard** を Master (Source of Truth) とし、**Claude Code** をメインのクライアントにしています。GitHub Copilot CLI も `.claude-plugin/` のマニフェストを読み込めるため、同じリポジトリをそのまま **GitHub Copilot CLI** のプラグインとして導入できます。
 
 ---
 
 ## 1. Claude Code で利用する
 
-### A. プラグインとして直接インストール
-公開リポジトリまたはフォーク先から直接プラグインとして組み込みます：
+### A. マーケットプレイスから導入（推奨）
 ```bash
-/plugin install github:sun-flat-yamada/agents-registry
+/plugin marketplace add sun-flat-yamada/agents-registry
+/plugin install agent-registry-bundle@agent-registry-marketplace
+```
+
+X2（セキュリティ）枠は Anthropic 公式マーケットプレイスから別に導入します：
+```bash
+/plugin marketplace add anthropics/claude-plugins-official
+/plugin install claude-security@claude-plugins-official
 ```
 
 ### B. ローカル開発・検証モード
-リポジトリを手元で開発・検証する際は、`--plugin-dir` オプションを指定して起動します：
 ```bash
 claude --plugin-dir /path/to/agents-registry
 ```
 
-### C. マーケットプレイス経由でカタログ追加
-プラグインマーケットプレイスとして追加し、必要なスキルを適宜有効化します：
+---
+
+## 2. GitHub Copilot CLI で利用する
+
+### A. マーケットプレイスから導入（推奨）
 ```bash
-/plugin marketplace add github:sun-flat-yamada/agents-registry
+copilot plugin marketplace add sun-flat-yamada/agents-registry
+copilot plugin install agent-registry-bundle@agent-registry-marketplace
 ```
+
+導入後は `copilot skill list` でスキル、対話モードの `/agent` でエージェントを確認できます。
+
+### B. ローカル開発・検証モード
+```bash
+copilot --plugin-dir /path/to/agents-registry
+```
+
+Copilot CLI はプラグインをキャッシュから読み込むため、マーケットプレイス経由で導入した場合は、変更後に `copilot plugin update agent-registry-bundle` で更新してください。
 
 ---
 
-## 2. Microsoft APM (Agent Package Manager) で利用する
+## 3. クライアントごとの対応範囲
 
-### A. 他プロジェクトからの依存関係追加 (`apm.yml`)
-利用側のプロジェクトの `apm.yml` に本リポジトリを依存として宣言します：
-```yaml
-name: my-target-project
-version: 1.0.0
-dependencies:
-  apm:
-    - github:sun-flat-yamada/agents-registry#v1.1.0
-targets:
-  - claude
-  - cursor
-  - copilot
-  - gemini
-```
+| 要素 | Claude Code | GitHub Copilot CLI | 備考 |
+| :--- | :--- | :--- | :--- |
+| V1〜V8 のスキル (`skills/`) | ✅ | ✅ | Agent Skills Standard の `SKILL.md`。CI で Copilot CLI への読み込みを確認しています |
+| エージェント (`agents/*.agent.md`) | ✅ | ✅ | Copilot CLI がエージェントとして読むのは `NAME.agent.md` 形式のため、この名前にそろえています。`model: sonnet` など Claude 固有の指定は、Copilot CLI では効かない場合があります |
+| X1 `/code-review` (`commands/`) | ✅ | ⚠️ 読み込みは可 | 手順の中で Claude のモデル名（haiku / sonnet / opus）と `gh` CLI を使います。Copilot CLI では同じ手順を既定のモデルで実行します |
+| X2 `claude-security` | ✅ | ❌ | Claude Code のワークフロー機能を使う公式プラグインです。Copilot CLI では Claude Code で実行してください |
 
-### B. パッケージのインストールと各ハーネス向けコンパイル
-```bash
-apm install
-apm compile
-```
-コンパイルにより、Cursor ルール (`.cursorrules`)、Copilot 設定、Gemini 設定が自動生成されます。
+### エージェントファイルの命名
+
+`agents/` のファイルは `NAME.agent.md` で統一しています。Claude Code は `.md` で終わるファイルをすべてエージェントとして読み、名前はフロントマターの `name` で決まるため、この命名でもそのまま動きます。Anthropic 公式から取り込んだエージェントも、内容は変えずにファイル名だけを `.agent.md` にしています。
 
 ---
 
-## 3. Master と .apm レイヤーの自動同期
+## 4. Master と .apm レイヤーの同期
 
-リポジトリ内のスキルやエージェントを追加・変更した際は、以下の同期スクリプトで Master から `.apm/` 下位互換レイヤーを自動更新・検証します。
+APM（Agent Package Manager）向けの `.apm/` は Master から自動生成します。スキルやエージェントを追加・変更したら、以下で同期・検証してください。APM の配信先 (`apm.yml` の `targets`) は `claude`、`copilot`、`agent-skills` です。
 
 ### Windows (PowerShell)
 ```powershell
-# 同期と自動更新を実行
 powershell -ExecutionPolicy Bypass -File ./scripts/sync-apm.ps1
-
-# 整合性チェックのみを実行 (CI検証など)
 powershell -ExecutionPolicy Bypass -File ./scripts/sync-apm.ps1 -VerifyOnly
 ```
 
 ### Linux / macOS (Bash)
 ```bash
-# 実行権限の付与 (初回のみ)
-chmod +x ./scripts/sync-apm.sh
-
-# 同期と自動更新を実行
 ./scripts/sync-apm.sh
-
-# 整合性チェックのみを実行 (CI検証など)
 ./scripts/sync-apm.sh --verify
 ```
 
 ---
 
-## 4. 提供プリミティブ一覧
+## 5. 配信しないもの
 
-| カテゴリ | パス | 説明 |
-| :--- | :--- | :--- |
-| **Skills** | `skills/` | Agent Skills Standard 準拠の自律スキル（コードレビュー、LLM-Wiki、Collection、スケジューラー等） |
-| **Agents** | `agents/` | 役割特化エージェント（セキュリティ監査、メモリ安全性、品質レビュー、Wiki キュレーター等） |
-| **Commands** | `commands/` | `/retrospective-harness`, `/update-harness`, `/explain` 等のスラッシュコマンド |
-| **Hooks** | `hooks/` | `PreToolUse` やコミット前検証を行う決定論的フック |
-| **MCP** | `.mcp.json` | Filesystem および Memory サーバー連携設定 |
+以前はプラグインに含めていた次のものは、利用者の環境に常に影響するため配信から外し、[`archive/dev-retired/`](../archive/dev-retired/README.md) に退避しました。
+
+- `hooks/`：`package.json` に lint / format があると、すべての Bash 実行の前に `npm run lint` と `npm run format` を走らせる PreToolUse フック
+- `.mcp.json`：Filesystem / Memory の MCP サーバー（どの枠にも対応しない）

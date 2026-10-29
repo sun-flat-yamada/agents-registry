@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "agent-registry-bundle",
   "version": "1.2.0",
-  "description": "Curated software-development Agent & Skills Registry: one best agent/skill per V-model phase slot, with Harness Engineering and Code Review suites. Supports Claude Plugin and APM standards.",
+  "description": "Curated software-development Agent & Skills Registry: one best agent/skill per V-model phase slot. Works in Claude Code and GitHub Copilot CLI.",
   "author": {
     "name": "sun_flat"
   },
@@ -38,15 +38,14 @@
     "./skills/meta-skill-manager"
   ],
   "agents": [
-    "./agents/code-explorer.md",
-    "./agents/code-architect.md",
-    "./agents/type-design-analyzer.md",
-    "./agents/code-simplifier.md",
-    "./agents/pr-test-analyzer.md",
-    "./agents/retrospective-harness-agent.md",
-    "./agents/update-harness-agent.md"
+    "./agents/code-explorer.agent.md",
+    "./agents/code-architect.agent.md",
+    "./agents/type-design-analyzer.agent.md",
+    "./agents/code-simplifier.agent.md",
+    "./agents/pr-test-analyzer.agent.md",
+    "./agents/retrospective-harness-agent.agent.md",
+    "./agents/update-harness-agent.agent.md"
   ],
-  "hooks": "./hooks/hooks.json",
   "commands": [
     "./commands/code-review.md",
     "./commands/retrospective-harness.md",
