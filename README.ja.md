@@ -90,6 +90,7 @@ powershell -ExecutionPolicy Bypass -File ./scripts/sync-apm.ps1
 | ドキュメント | 概要 |
 | :--- | :--- |
 | [🧭 **V字モデル骨格と選定基準**](docs/v-model-skeleton.md) | 工程ごとの枠、選定基準、ベスト 1 つを入れ替えるルール。 |
+| [🗓️ **月次レビュー**](docs/v-model-skeleton.md#4-月次レビュー) | 毎月 1 回、定期タスクが Anthropic 公式リポジトリの変更を確認し、枠を改善できる場合はドラフト PR を作ります。マージは必ず人間が判断します。 |
 | [🛡️ **セキュリティ監査ガイド**](docs/security-audit.md) | Cisco AI Skill Scanner、NVIDIA SkillSpector、Built-in Linter の統合仕様、CLI リファレンス、およびスキル新規追加時の CI/CD 自動稼働パイプライン |
 | [🧠 **Harness Engineering ガイド**](docs/harness-engineering.md) | Retrospective Harness Optimization (RHO) に基づくエージェント環境の自己診断・改善計画 (HIP) 策定・安全な自動更新サイクル |
 | [🚀 **インストールとマルチハーネス配信**](docs/usage-and-deployment.md) | Claude Code での利用方法、Microsoft APM (`apm.yml`) によるマルチプラットフォーム配信、および Master レイヤー自動同期手順 |

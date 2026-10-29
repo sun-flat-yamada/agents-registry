@@ -90,6 +90,7 @@ Detailed guides, configuration procedures, and architecture specs are organized 
 | Document | Overview |
 | :--- | :--- |
 | [🧭 **V-Model Skeleton & Selection Criteria**](docs/v-model-skeleton.md) | Phase slots, selection criteria and the replacement rule for registering one best entry per slot. |
+| [🗓️ **Monthly Review**](docs/v-model-skeleton.md#4-月次レビュー) | Once a month a scheduled task checks Anthropic's official repositories for changes and opens a draft PR when a slot can be improved. Merges are always decided by a human. |
 | [🛡️ **Security Audit Guide**](docs/security-audit.md) | Integration specs for Cisco AI Skill Scanner, NVIDIA SkillSpector, and Built-in Linter, CLI reference, and CI/CD automated scan pipeline. |
 | [🧠 **Harness Engineering Guide**](docs/harness-engineering.md) | Autonomous environment self-diagnosis, Harness Improvement Plan (HIP) formulation, and safe automatic update cycles based on Retrospective Harness Optimization (RHO). |
 | [🚀 **Installation & Multi-Harness Deployment**](docs/usage-and-deployment.md) | Usage guide for Claude Code, multi-platform deployment via Microsoft APM (`apm.yml`), and Master layer auto-sync procedures. |
